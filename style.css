@@ -779,6 +779,19 @@ section[id] { scroll-margin-top: var(--header-h); }
 .lavori h2 { color: var(--testo-chiaro); }
 .lavori .section-lead { color: rgba(244, 241, 234, 0.78); }
 
+/* Corridoio "ImageStreamHero" (catalogo-animazioni-21st) — porting vanilla in
+   script.js (initLavoriStream): due carreggiate di screenshot PoC che corrono
+   in prospettiva verso lo spettatore, @keyframes generati a runtime, nessuna
+   dipendenza npm. Sfondo trasparente apposta: eredita l'indaco-950 di .lavori,
+   niente cucitura da nascondere sopra/sotto. */
+.lavori-stream {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: clamp(190px, 24vw, 300px);
+  margin: 0.25rem 0 clamp(1.5rem, 4vw, 2.5rem);
+}
+
 .lavori-strip-wrap { position: relative; }
 .lavori-strip {
   display: flex;

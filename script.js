@@ -134,6 +134,103 @@
   }
   initOffertaSpotlight();
 
+  // Corridoio screenshot in #lavori: porting vanilla di image-stream-hero.tsx
+  // (idee/elenco/P03-.../catalogo-animazioni-21st/image-stream-hero/, catalogo
+  // componenti di Kevin). Stessa geometria/formula del sorgente React (nessuna
+  // dipendenza framer-motion lì, quindi il porting è 1:1): due carreggiate di
+  // card che avanzano in prospettiva, @keyframes calcolati e iniettati a
+  // runtime invece che con hook React. Le sei immagini sono le stesse
+  // screenshot già usate nella striscia sottostante (img/portfolio/).
+  function initLavoriStream() {
+    var mount = document.querySelector(".lavori-stream");
+    if (!mount) return;
+
+    var images = [
+      "img/portfolio/campo-alpini-home.jpg",
+      "img/portfolio/hair-studio-home.jpg",
+      "img/portfolio/pizzeria-home.jpg",
+      "img/portfolio/hotel-borghetto-home.jpg",
+      "img/portfolio/ink-factory-home.jpg",
+      "img/portfolio/ottobassotto-home.jpg"
+    ];
+
+    // Stessi default di CorridorPath nel sorgente .tsx.
+    var P = {
+      perspective: 30, cardWidth: 18, cardHeight: 25, cardRadius: 0.6,
+      birthHeight: 2.6, exitHeight: 46, railBirth: -11, railExit: 44,
+      fan: 3.3, turnBirth: 6, turnExit: 28, stops: 24
+    };
+    var cards = window.matchMedia("(max-width: 640px)").matches ? 6 : 9;
+    var speed = 20;
+    var axis = 50;
+
+    function keyframesCss(dir, name) {
+      var steps = [];
+      for (var s = 0; s <= P.stops; s++) {
+        var u = s / P.stops;
+        // Geometrico sulla dimensione apparente: rapporto costante tra card
+        // consecutive, così il nastro resta compatto a entrambi gli estremi.
+        var scale = (P.birthHeight / P.cardHeight) * Math.pow(P.exitHeight / P.birthHeight, u);
+        var z = P.perspective * (1 - 1 / scale);
+        var rail = P.railExit - (P.railExit - P.railBirth) * Math.pow(1 - u, P.fan);
+        var turn = P.turnBirth + (P.turnExit - P.turnBirth) * u;
+        steps.push(
+          (u * 100).toFixed(2) + "%{transform:translate3d(" +
+          (dir * rail).toFixed(2) + "cqw,0," + z.toFixed(2) + "cqw) rotateY(" +
+          (-dir * turn).toFixed(2) + "deg)}"
+        );
+      }
+      return "@keyframes " + name + "{" + steps.join("") + "}";
+    }
+
+    var id = "ls" + Math.random().toString(36).slice(2, 8);
+    var railRight = "ish-r-" + id, railLeft = "ish-l-" + id, cardCls = "ish-c-" + id;
+
+    var styleTag = document.createElement("style");
+    styleTag.textContent =
+      keyframesCss(1, railRight) + keyframesCss(-1, railLeft) +
+      "@media(prefers-reduced-motion:reduce){." + cardCls + "{animation-play-state:paused}}";
+    mount.appendChild(styleTag);
+
+    mount.style.containerType = "inline-size";
+
+    var perspectiveLayer = document.createElement("div");
+    perspectiveLayer.style.cssText =
+      "position:absolute;inset:0;pointer-events:none;" +
+      "perspective:" + P.perspective + "cqw;perspective-origin:50% " + axis + "%;";
+    var stage = document.createElement("div");
+    stage.style.cssText = "position:absolute;inset:0;transform-style:preserve-3d;";
+    perspectiveLayer.appendChild(stage);
+
+    [railRight, railLeft].forEach(function (railName) {
+      for (var i = 0; i < cards; i++) {
+        var img = images[i % images.length];
+        var cardEl = document.createElement("div");
+        cardEl.className = cardCls;
+        cardEl.style.cssText =
+          "position:absolute;overflow:hidden;left:50%;top:" + axis + "%;" +
+          "width:" + P.cardWidth + "cqw;height:" + P.cardHeight + "cqw;" +
+          "margin-left:" + (-P.cardWidth / 2) + "cqw;margin-top:" + (-P.cardHeight / 2) + "cqw;" +
+          "border-radius:" + P.cardRadius + "cqw;" +
+          "animation:" + railName + " " + speed + "s linear infinite;" +
+          "animation-delay:" + (-(i * speed) / cards) + "s;" +
+          "backface-visibility:hidden;";
+        var imgEl = document.createElement("img");
+        imgEl.src = img;
+        imgEl.alt = "";
+        imgEl.loading = "lazy";
+        imgEl.decoding = "async";
+        imgEl.draggable = false;
+        imgEl.style.cssText = "width:100%;height:100%;object-fit:cover;display:block;";
+        cardEl.appendChild(imgEl);
+        stage.appendChild(cardEl);
+      }
+    });
+
+    mount.appendChild(perspectiveLayer);
+  }
+  initLavoriStream();
+
   // Scroll reveal
   var revealEls = document.querySelectorAll(".reveal");
   if ("IntersectionObserver" in window) {
