@@ -792,105 +792,51 @@ section[id] { scroll-margin-top: var(--header-h); }
   margin: 0.25rem 0 clamp(1.5rem, 4vw, 2.5rem);
 }
 
-.lavori-strip-wrap { position: relative; }
-.lavori-strip {
-  display: flex;
-  gap: 1.1rem;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
-  cursor: grab;
-  /* rientro allineato a .container = width: min(1180px, 92%) */
-  padding: 0.4rem max(4%, calc((100% - 1180px) / 2)) 1.4rem;
-  /* NECESSARIO, non cosmetico: `scroll-snap-align: start` allinea la card alla
-     *snapport*, che di default ignora il padding-inline. Senza questa riga il
-     browser auto-scrolla di ~170px al caricamento per far combaciare la prima
-     card col bordo del viewport, mangiando il rientro sinistro e tagliandola.
-     Con lo stesso valore in scroll-padding, scrollLeft:0 torna una posizione di
-     snap valida e la card 1 si allinea a .container. Verificato dal vivo. */
-  scroll-padding-inline: max(4%, calc((100% - 1180px) / 2));
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.lavori-strip::-webkit-scrollbar { display: none; }
-.lavori-strip.is-dragging { cursor: grabbing; scroll-snap-type: none; }
-.lavori-strip-wrap::after {
-  content: "";
-  position: absolute; top: 0; right: 0; bottom: 0;
-  width: clamp(24px, 5vw, 64px);
-  background: linear-gradient(90deg, rgba(15, 17, 40, 0), var(--indaco-950));
-  pointer-events: none;
-  opacity: 1;
-  transition: opacity var(--transizione);
-}
-.lavori-strip-wrap::before {
-  content: "";
-  position: absolute; top: 0; left: 0; bottom: 0;
-  width: clamp(24px, 5vw, 64px);
-  background: linear-gradient(270deg, rgba(15, 17, 40, 0), var(--indaco-950));
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0;
-  transition: opacity var(--transizione);
-}
-.lavori-strip-wrap.at-end::after { opacity: 0; }
-.lavori-strip-wrap.at-start::before { opacity: 0; }
-/* Frecce: sempre nel DOM (accessibili da tastiera), nascoste via opacity così
-   restano cliccabili anche se sfumano — mai display:none su un controllo di
-   navigazione essenziale su desktop senza trackpad/scroll orizzontale. */
-.lavori-nav {
-  position: absolute; top: 50%; z-index: 2;
-  width: 42px; height: 42px;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 50%;
-  border: 1px solid rgba(244, 241, 234, 0.25);
-  background: rgba(23, 26, 61, 0.85);
-  color: var(--testo-chiaro);
-  cursor: pointer;
-  transition: opacity var(--transizione), background var(--transizione), transform var(--transizione);
-  transform: translateY(-50%);
-}
-.lavori-nav:hover { background: var(--indaco-900); border-color: rgba(232, 163, 61, 0.5); }
-.lavori-nav svg { width: 20px; height: 20px; }
-.lavori-nav-prev { left: max(1%, calc((100% - 1180px) / 2 + 0.4rem)); }
-.lavori-nav-next { right: max(1%, calc((100% - 1180px) / 2 + 0.4rem)); }
-.lavori-strip-wrap.at-start .lavori-nav-prev,
-.lavori-strip-wrap.at-end .lavori-nav-next {
-  opacity: 0; pointer-events: none;
-}
-@media (max-width: 640px) {
-  .lavori-nav { display: none; }
-}
-.lavoro-card {
-  flex: 0 0 clamp(258px, 32vw, 392px);
-  scroll-snap-align: start;
+/* Unico link reale della sezione: il sito vero e online consegnato a un
+   cliente (non un PoC interno). Riusa il linguaggio visivo di .lavoro-card
+   (ritirata insieme alla striscia) ma centrato, singolo, senza scroll. */
+.lavoro-live {
+  display: block;
+  max-width: 620px;
+  margin: 0 auto;
   background: var(--indaco-900);
   border: 1px solid rgba(244, 241, 234, 0.1);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   overflow: hidden;
   transition: transform var(--transizione), border-color var(--transizione), box-shadow var(--transizione);
 }
-.lavoro-card:hover {
+.lavoro-live:hover {
   transform: translateY(-5px);
   border-color: rgba(232, 163, 61, 0.5);
   box-shadow: var(--ombra);
 }
-.lavoro-card img {
+.lavoro-live img {
   width: 100%;
-  /* `height: auto` NON è ridondante: gli attributi width/height sull'<img> (che
-     teniamo, evitano il salto di layout) mappano su `height: 709px` come
-     presentation hint, e `aspect-ratio` si applica solo quando una delle due
-     dimensioni è auto. Senza, la box diventava 390×709 e object-fit:cover
-     ritagliava una fetta verticale ingrandita invece della schermata intera. */
-  height: auto;
+  height: auto; /* vedi nota storica su width/height+aspect-ratio, invariata */
   aspect-ratio: 1568 / 709;
   object-fit: cover;
   object-position: top center;
 }
-.lavoro-meta { padding: 1rem 1.1rem 1.2rem; }
-.lavoro-meta h3 { font-size: 1rem; color: var(--testo-chiaro); margin-bottom: 0.25em; }
-.lavoro-meta p { font-size: 0.83rem; color: rgba(244, 241, 234, 0.65); margin: 0; }
-.lavori-note { max-width: 64ch; font-size: 0.9rem; color: rgba(244, 241, 234, 0.62); margin: 1.2rem 0 0; }
+.lavoro-live-body { padding: 1.5rem 1.7rem 1.8rem; text-align: center; }
+.lavoro-live-badge {
+  display: inline-block;
+  padding: 0.3rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(232, 163, 61, 0.15);
+  color: var(--ambra-chiara);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.8rem;
+}
+.lavoro-live-body h3 { font-size: 1.3rem; color: var(--testo-chiaro); margin-bottom: 0.2em; }
+.lavoro-live-body p {
+  font-size: 0.92rem;
+  color: rgba(244, 241, 234, 0.65);
+  margin: 0 0 1.2rem;
+  font-family: monospace;
+}
+.lavoro-live-body .btn { pointer-events: none; }
 
 /* ---------- Settori / POC grid ---------- */
 .settori { background: var(--panna); }
