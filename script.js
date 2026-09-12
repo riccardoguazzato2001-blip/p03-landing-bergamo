@@ -231,6 +231,292 @@
   }
   initLavoriStream();
 
+  function lerpC(a, b, t) { return a + (b - a) * t; }
+
+  // CTA "Rispondi al sondaggio": porting vanilla di PixelFireButton
+  // (catalogo-animazioni-21st/ember-footer-cta, .tsx sorgente React/canvas).
+  // Canvas doom-fire a celle 3px che riempie il bottone dal basso come un
+  // gauge liquido (ease esponenziale, waterline che ondeggia), l'hover piega
+  // le fiamme verso il cursore, il press spara un burst. Ricolorato sulla
+  // palette ambra del sito (era indaco/#2a2a2a nel sorgente) — l'ancora di
+  // blend (BASE_*) è lo stesso stop t=0.4 della palette, stessa tecnica
+  // dell'originale. Sempre acceso (CTA primario, nessuno stato "spento").
+  function initEmberButton() {
+    var btn = document.getElementById("surveyCtaBtn");
+    var reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    if (!btn || reduceMotion) return;
+
+    var canvas = document.createElement("canvas");
+    canvas.className = "btn-ember-canvas";
+    canvas.setAttribute("aria-hidden", "true");
+    btn.insertBefore(canvas, btn.firstChild);
+    var ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    var CELL = 3, STEPS = 38;
+    var BASE_R = 201, BASE_G = 127, BASE_B = 30; // ambra-scura, ancora di blend (= palette a t=0.4)
+
+    function buildPalette(alpha) {
+      var p = new Uint8Array(STEPS * 4);
+      for (var s = 0; s < STEPS; s++) {
+        var t = s / (STEPS - 1);
+        var r, g, b;
+        if (t < 0.4) {
+          var e = t / 0.4;
+          r = lerpC(90, BASE_R, e); g = lerpC(35, BASE_G, e); b = lerpC(10, BASE_B, e);
+        } else if (t < 0.75) {
+          var e2 = (t - 0.4) / 0.35;
+          r = lerpC(BASE_R, 232, e2); g = lerpC(BASE_G, 163, e2); b = lerpC(BASE_B, 61, e2);
+        } else {
+          var e3 = (t - 0.75) / 0.25;
+          r = lerpC(232, 246, e3); g = lerpC(163, 207, e3); b = lerpC(61, 142, e3);
+        }
+        p[s * 4] = r; p[s * 4 + 1] = g; p[s * 4 + 2] = b;
+        p[s * 4 + 3] = Math.round(Math.pow(t, 1.2) * alpha);
+      }
+      return p;
+    }
+    var palette = buildPalette(200);
+
+    var cols = 8, rows = 8, heat = new Uint8Array(0), waterline = new Float32Array(0), img = null;
+    var pointerX = 0, hover = false, pressed = false;
+
+    function size() {
+      cols = Math.max(8, Math.ceil((btn.offsetWidth || 160) / CELL));
+      rows = Math.max(6, Math.ceil((btn.offsetHeight || 38) / CELL));
+      canvas.width = cols; canvas.height = rows;
+      heat = new Uint8Array(cols * rows);
+      waterline = new Float32Array(cols);
+      pointerX = cols / 2;
+      img = ctx.createImageData(cols, rows);
+    }
+    size();
+    if ("ResizeObserver" in window) new ResizeObserver(size).observe(btn);
+
+    btn.addEventListener("pointermove", function (e) {
+      var rect = btn.getBoundingClientRect();
+      if (rect.width > 0) pointerX = ((e.clientX - rect.left) / rect.width) * cols;
+    });
+    btn.addEventListener("mouseenter", function () { hover = true; });
+    btn.addEventListener("mouseleave", function () { hover = false; pressed = false; });
+    btn.addEventListener("pointerdown", function () { pressed = true; });
+    window.addEventListener("pointerup", function () { pressed = false; });
+
+    var level = 0, lastT = 0, acc = 0, burst = 0, wasPressed = false;
+    var TICK = 1000 / 30;
+
+    function step(t) {
+      requestAnimationFrame(step);
+      if (!lastT) lastT = t;
+      var dt = Math.min(64, t - lastT);
+      lastT = t;
+
+      level += (1 - level) * (1 - Math.exp(-dt / 240));
+
+      acc += dt;
+      if (acc >= TICK) {
+        acc %= TICK;
+
+        for (var x = 0; x < cols; x++) {
+          waterline[x] = Math.max(-4, Math.min(4, waterline[x] + (Math.random() - 0.5) * 1.6));
+        }
+        for (var x2 = 1; x2 < cols - 1; x2++) {
+          waterline[x2] = (waterline[x2 - 1] + waterline[x2] * 2 + waterline[x2 + 1]) / 4;
+        }
+
+        for (var y = 0; y < rows - 1; y++) {
+          for (var x3 = 0; x3 < cols; x3++) {
+            var src = (y + 1) * cols + x3;
+            var dst = y * cols + Math.min(cols - 1, Math.max(0, x3 + ((Math.random() * 3) | 0) - 1));
+            var v = heat[src] - (1 + ((Math.random() * 2.4) | 0));
+            heat[dst] = v > 0 ? v : 0;
+          }
+        }
+
+        var churn = level * (1 - level) * 4;
+        var fill = level * (rows + 6);
+
+        if (pressed && !wasPressed) burst = 1;
+        wasPressed = pressed;
+        burst = pressed ? Math.max(burst * 0.86, 0.45) : burst * 0.8;
+
+        for (var x4 = 0; x4 < cols; x4++) {
+          var h = fill + waterline[x4] * (0.4 + churn);
+          var surface = rows - 1 - Math.floor(h);
+          if (level > 0.02 && surface >= 0 && surface < rows) {
+            heat[surface * cols + x4] = STEPS - 1;
+            if (surface + 1 < rows) heat[(surface + 1) * cols + x4] = STEPS - 1;
+          }
+          if (level > 0.97) {
+            if (burst > 0.05) {
+              heat[(rows - 1) * cols + x4] = STEPS - 1;
+              heat[(rows - 2) * cols + x4] = STEPS - 1;
+              if (rows > 2 && Math.random() < burst) heat[(rows - 3) * cols + x4] = STEPS - 1;
+              if (Math.random() < burst * 0.3) heat[((Math.random() * rows) | 0) * cols + x4] = STEPS - 1;
+            } else if (hover) {
+              heat[(rows - 1) * cols + x4] = STEPS - 1;
+              if (Math.random() < 0.7) heat[(rows - 2) * cols + x4] = STEPS - 2;
+              var d = x4 - pointerX;
+              var near = Math.exp(-(d * d) / 18);
+              if (near > 0.35 && rows > 2) heat[(rows - 3) * cols + x4] = STEPS - 1;
+              if (near > 0.7 && rows > 3) heat[(rows - 4) * cols + x4] = STEPS - 3;
+            } else if (Math.random() < 0.55) {
+              heat[(rows - 1) * cols + x4] = Math.random() < 0.5 ? STEPS - 11 : STEPS - 17;
+            }
+          }
+        }
+      }
+
+      var churn2 = level * (1 - level) * 4;
+      var fill2 = level * (rows + 6);
+      var d2 = img.data;
+      for (var cx = 0; cx < cols; cx++) {
+        var h2 = fill2 + waterline[cx] * (0.4 + churn2);
+        for (var cy = 0; cy < rows; cy++) {
+          var idx = cy * cols + cx;
+          var o = idx * 4;
+          var pi = heat[idx] * 4;
+          var a = palette[pi + 3];
+          if (rows - cy <= h2) {
+            d2[o] = BASE_R + (((palette[pi] - BASE_R) * a) >> 8);
+            d2[o + 1] = BASE_G + (((palette[pi + 1] - BASE_G) * a) >> 8);
+            d2[o + 2] = BASE_B + (((palette[pi + 2] - BASE_B) * a) >> 8);
+            d2[o + 3] = 255;
+          } else {
+            d2[o] = palette[pi]; d2[o + 1] = palette[pi + 1]; d2[o + 2] = palette[pi + 2]; d2[o + 3] = a;
+          }
+        }
+      }
+      ctx.putImageData(img, 0, 0);
+    }
+    requestAnimationFrame(step);
+  }
+  initEmberButton();
+
+  // Footer: porting vanilla di FlameBand (catalogo-animazioni-21st/ember-footer-cta,
+  // .tsx sorgente). Fascia di fuoco a celle su canvas, cresta a seno che
+  // ondeggia, vento sul passaggio del puntatore, compositing plus-lighter.
+  // Ricolorata ambra (era indaco/violetto nel sorgente) e dimensionata
+  // sull'altezza reale del footer (non un'altezza fissa come nell'originale).
+  function initFooterFlame() {
+    var footer = document.getElementById("siteFooter");
+    var reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    if (!footer || reduceMotion) return;
+
+    var canvas = document.createElement("canvas");
+    canvas.className = "site-footer-flame";
+    canvas.setAttribute("aria-hidden", "true");
+    footer.insertBefore(canvas, footer.firstChild);
+    var ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    var CELL = 8, ALPHA = 70, SPEED = 30, WAVE = 1, WIND = 1, STEPS_F = 38;
+    // indaco-950 (fondo) -> ember scuro -> ambra -> ambra-chiara (pallido)
+    var STOPS = [[15, 17, 40], [140, 60, 10], [220, 140, 40], [250, 222, 165]];
+
+    function buildBandPalette(alpha) {
+      var p = new Uint8Array(STEPS_F * 4);
+      for (var s = 0; s < STEPS_F; s++) {
+        var t = s / (STEPS_F - 1);
+        var r, g, b;
+        if (t < 0.4) {
+          var e = t / 0.4;
+          r = lerpC(STOPS[0][0], STOPS[1][0], e); g = lerpC(STOPS[0][1], STOPS[1][1], e); b = lerpC(STOPS[0][2], STOPS[1][2], e);
+        } else if (t < 0.75) {
+          var e2 = (t - 0.4) / 0.35;
+          r = lerpC(STOPS[1][0], STOPS[2][0], e2); g = lerpC(STOPS[1][1], STOPS[2][1], e2); b = lerpC(STOPS[1][2], STOPS[2][2], e2);
+        } else {
+          var e3 = (t - 0.75) / 0.25;
+          r = lerpC(STOPS[2][0], STOPS[3][0], e3); g = lerpC(STOPS[2][1], STOPS[3][1], e3); b = lerpC(STOPS[2][2], STOPS[3][2], e3);
+        }
+        p[s * 4] = r; p[s * 4 + 1] = g; p[s * 4 + 2] = b;
+        p[s * 4 + 3] = Math.round(Math.pow(t, 1.2) * alpha);
+      }
+      return p;
+    }
+    var palette = buildBandPalette(ALPHA);
+
+    var cols = 8, rows = 8, m = new Uint8Array(0), img = null, windArr = new Float32Array(0);
+
+    function size() {
+      cols = Math.max(8, Math.ceil(footer.clientWidth / CELL));
+      rows = Math.max(6, Math.ceil(footer.clientHeight / CELL));
+      canvas.width = cols; canvas.height = rows;
+      m = new Uint8Array(cols * rows);
+      img = ctx.createImageData(cols, rows);
+      windArr = new Float32Array(cols);
+    }
+    size();
+    if ("ResizeObserver" in window) new ResizeObserver(size).observe(footer);
+
+    var pointer = { x: 0, y: 0, lastX: 0, vel: 0, active: false };
+    window.addEventListener("pointermove", function (e) {
+      pointer.x = e.clientX; pointer.y = e.clientY; pointer.active = e.pointerType !== "touch";
+    }, { passive: true });
+
+    var last = 0, visible = true;
+    function step(tms) {
+      requestAnimationFrame(step);
+      if (!visible || tms - last < 1000 / SPEED) return;
+      last = tms;
+      var t = tms / 1000;
+
+      var crest = WAVE * (STEPS_F * 0.55);
+      for (var x = 0; x < cols; x++) {
+        var n = 0.5 + 0.5 * (Math.sin(x * 0.035 + t * 0.45) * 0.6 + Math.sin(x * 0.011 - t * 0.2) * 0.4);
+        var ripple = Math.sin(x * 0.21 + t * 1.7) + Math.sin(x * 0.047 - t * 0.9);
+        var jitter = (Math.random() * 6) | 0;
+        m[(rows - 1) * cols + x] = Math.max(0, Math.round(STEPS_F - 3 - crest * (1 - n) + ripple * 1.5 - jitter));
+      }
+
+      pointer.vel = pointer.vel * 0.8 + (pointer.x - pointer.lastX) * 0.2;
+      pointer.lastX = pointer.x;
+      windArr = new Float32Array(cols);
+      if (WIND > 0 && pointer.active && Math.abs(pointer.vel) > 0.5) {
+        var rect = canvas.getBoundingClientRect();
+        if (rect.width > 0 && pointer.y >= rect.top - 120 && pointer.y <= rect.bottom + 40 &&
+            pointer.x >= rect.left - 100 && pointer.x <= rect.right + 100) {
+          var px = ((pointer.x - rect.left) / rect.width) * cols;
+          var amp = Math.max(-1, Math.min(1, pointer.vel / 28)) * WIND;
+          for (var wx = 0; wx < cols; wx++) {
+            var dd = (wx - px) / 20;
+            windArr[wx] = amp * Math.exp(-dd * dd);
+          }
+        }
+      }
+
+      for (var y = 1; y < rows; y++) {
+        var rowStart = y * cols;
+        for (var xx = 0; xx < cols; xx++) {
+          var idx = rowStart + xx;
+          var v = m[idx];
+          var r4 = (Math.random() * 3.99) | 0;
+          var drift = r4 > 1 ? r4 - 2 : 0;
+          var w = windArr[xx];
+          if (w !== 0 && Math.random() < Math.abs(w)) drift += w > 0 ? 1 : -1;
+          var decay = r4 & 1 ? 2 : 1;
+          var target = idx - cols + drift;
+          m[Math.max(0, Math.min(cols * rows - 1, target))] = v > decay ? v - decay : 0;
+        }
+      }
+
+      var d = img.data;
+      for (var i = 0, o = 0; i < cols * rows; i++, o += 4) {
+        var pi = m[i] * 4;
+        d[o] = palette[pi]; d[o + 1] = palette[pi + 1]; d[o + 2] = palette[pi + 2]; d[o + 3] = palette[pi + 3];
+      }
+      ctx.putImageData(img, 0, 0);
+    }
+
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        visible = entries[0].isIntersecting;
+      }).observe(canvas);
+    }
+    requestAnimationFrame(step);
+  }
+  initFooterFlame();
+
   // Scroll reveal
   var revealEls = document.querySelectorAll(".reveal");
   if ("IntersectionObserver" in window) {

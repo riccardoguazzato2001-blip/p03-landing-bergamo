@@ -263,6 +263,21 @@ section[id] { scroll-margin-top: var(--header-h); }
 .btn-ghost:hover { background: rgba(255,255,255,0.18); transform: translateY(-2px); }
 .btn-lg { padding: 1.1rem 2.2rem; font-size: 1.05rem; }
 
+/* Porting vanilla di PixelFireButton (catalogo-animazioni-21st/ember-footer-cta,
+   .tsx originale) sul CTA "Rispondi al sondaggio": canvas doom-fire a celle 3px
+   che riempie il bottone come un gauge liquido, ricolorato sulla palette ambra
+   del sito (era indaco/violetto nel .tsx sorgente) al posto del CSS gradient
+   statico. overflow:hidden clippa il canvas rettangolare alla pillola. Il
+   gradient .btn-primary resta come sfondo di partenza/fallback (reduced-motion
+   o JS assente non aggiungono il canvas, quindi il bottone resta comunque
+   completo e cliccabile). */
+.btn-ember { position: relative; overflow: hidden; isolation: isolate; }
+.btn-ember-canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  image-rendering: pixelated; pointer-events: none;
+}
+.btn-ember-label { position: relative; z-index: 1; }
+
 /* ---------- Hero ---------- */
 .hero {
   position: relative;
@@ -856,7 +871,21 @@ section[id] { scroll-margin-top: var(--header-h); }
 .cta-finale-lead { color: rgba(244,241,234,0.8); max-width: 52ch; margin: 0 auto 2rem; }
 
 /* ---------- Footer ---------- */
-.site-footer { background: var(--indaco-950); color: rgba(244,241,234,0.6); padding: 2rem 0; text-align: center; }
+.site-footer {
+  position: relative; overflow: hidden;
+  background: var(--indaco-950); color: rgba(244,241,234,0.6); padding: 2rem 0; text-align: center;
+}
+/* Porting vanilla di FlameBand (catalogo-animazioni-21st/ember-footer-cta):
+   fascia di fuoco a celle su canvas, compositing plus-lighter, ricolorata
+   ambra (era indaco/violetto nel .tsx sorgente) per restare in palette col
+   resto del sito. Riempie l'intera altezza del footer (dimensionata dal suo
+   stesso clientHeight, non un'altezza fissa come nell'originale). */
+.site-footer-flame {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  mix-blend-mode: plus-lighter; pointer-events: none;
+  image-rendering: pixelated;
+}
+.footer-inner { position: relative; z-index: 1; }
 .footer-inner p { margin: 0.2em 0; font-size: 0.85rem; color: inherit; }
 .footer-sub { opacity: 0.6; font-size: 0.78rem !important; }
 .footer-inner a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
