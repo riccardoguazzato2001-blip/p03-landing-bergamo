@@ -119,6 +119,21 @@
   }
   initDockNav();
 
+  // Spotlight sull'hover delle card #offerta (--mx/--my in % lette dal CSS)
+  function initOffertaSpotlight() {
+    var cards = document.querySelectorAll(".offerta-card");
+    cards.forEach(function (card) {
+      card.addEventListener("mousemove", function (e) {
+        var rect = card.getBoundingClientRect();
+        var mx = ((e.clientX - rect.left) / rect.width) * 100;
+        var my = ((e.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty("--mx", mx + "%");
+        card.style.setProperty("--my", my + "%");
+      });
+    });
+  }
+  initOffertaSpotlight();
+
   // Scroll reveal
   var revealEls = document.querySelectorAll(".reveal");
   if ("IntersectionObserver" in window) {

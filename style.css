@@ -478,26 +478,71 @@ section[id] { scroll-margin-top: var(--header-h); }
 }
 .team-panel:hover .team-panel-info p { opacity: 1; transform: translateY(0); }
 
-/* ---------- Offerta ---------- */
+/* ---------- Offerta ----------
+   Griglia a 6 celle con divisori sottili (hairline), crocette d'incrocio
+   e spotlight radiale che segue il cursore sull'hover: reimplementazione
+   vanilla-CSS/JS (nessuna dipendenza) di "Feature Grid Spotlight Cards"
+   di hirael (21st.dev, licenza MIT) — vedi catalogo-animazioni-21st/README.md
+   § "Prompt 21st.dev disponibili per il team". Sorgente .tsx originale
+   bloccata dietro account 21st (free tier), quindi ricostruita dalla
+   descrizione pubblica del componente + screenshot di anteprima, non
+   copiata: nessun testo/codice di terzi incollato qui. */
 .offerta { background: var(--panna-alt); }
 .offerta-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.3rem;
   margin-bottom: 2.6rem;
+  border-top: 1px solid var(--bordo);
+  border-left: 1px solid var(--bordo);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--carta);
 }
 .offerta-card {
-  background: var(--carta);
-  border-radius: var(--radius);
-  padding: 1.8rem;
-  border: 1px solid var(--bordo);
-  transition: transform var(--transizione), box-shadow var(--transizione);
+  position: relative;
+  padding: 2rem 1.8rem;
+  border-right: 1px solid var(--bordo);
+  border-bottom: 1px solid var(--bordo);
+  isolation: isolate;
 }
-.offerta-card:hover { transform: translateY(-4px); box-shadow: var(--ombra-lieve); }
+/* Spotlight: --mx/--my in % impostate via JS su mousemove (0 = nessun hover) */
+.offerta-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), rgba(232, 163, 61, 0.16), transparent 70%);
+  transition: opacity var(--transizione);
+  pointer-events: none;
+}
+.offerta-card:hover::before,
+.offerta-card:focus-within::before { opacity: 1; }
+/* Crocette d'incrocio: solo sui 2 veri incroci interni della griglia
+   3x2 (angolo basso-destra delle prime 2 card) — solo desktop 3 colonne,
+   sotto 980px lo schema colonne cambia e l'incrocio si sposterebbe. */
+.offerta-card::after {
+  content: "";
+  position: absolute;
+  width: 9px; height: 9px;
+  right: -5px; bottom: -5px;
+  z-index: 1;
+  background:
+    linear-gradient(var(--ambra-scura), var(--ambra-scura)) center / 100% 1px no-repeat,
+    linear-gradient(90deg, var(--ambra-scura), var(--ambra-scura)) center / 1px 100% no-repeat;
+  opacity: 0;
+  transition: opacity var(--transizione);
+  display: none;
+}
+@media (min-width: 981px) {
+  .offerta-card:nth-child(-n+2)::after { opacity: 0.5; display: block; }
+}
+.offerta-card > * { position: relative; z-index: 2; }
 .icon-wrap {
   width: 46px; height: 46px;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   background: rgba(232, 163, 61, 0.15);
+  border: 1px solid rgba(232, 163, 61, 0.3);
   color: var(--ambra-scura);
   display: grid; place-items: center;
   margin-bottom: 1rem;
