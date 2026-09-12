@@ -838,49 +838,7 @@ section[id] { scroll-margin-top: var(--header-h); }
 }
 .lavoro-live-body .btn { pointer-events: none; }
 
-/* ---------- Settori / POC grid ---------- */
-.settori { background: var(--panna); }
-.settori-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.1rem;
-}
-.settori-card {
-  background: var(--carta);
-  border: 1px solid var(--bordo);
-  border-radius: var(--radius);
-  padding: 1.5rem 1.3rem;
-  position: relative;
-  overflow: hidden;
-  transition: transform var(--transizione), box-shadow var(--transizione), border-color var(--transizione);
-}
-.settori-card::before {
-  content: "";
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(232,163,61,0.08), transparent 60%);
-  opacity: 0;
-  transition: opacity var(--transizione);
-}
-.settori-card:hover { transform: translateY(-5px); box-shadow: var(--ombra-lieve); border-color: rgba(232,163,61,0.4); }
-.settori-card:hover::before { opacity: 1; }
-/* Icone settori: SVG inline nello stesso .icon-wrap di #offerta (una sola
-   lingua visiva su tutta la pagina) invece delle emoji di prima — regola
-   `no-emoji-icons` già documentata in P03/CLAUDE.md.
-   `position: relative` serve a stare sopra il gradiente .settori-card::before. */
-.settori-icon {
-  width: 42px; height: 42px;
-  margin-bottom: 0.85rem;
-  position: relative;
-}
-.settori-card h3 { font-size: 1rem; margin-bottom: 0.35em; position: relative; }
-.settori-card p { font-size: 0.85rem; margin-bottom: 0.9em; position: relative; }
-.settori-cta {
-  font-size: 0.85rem; font-weight: 600; color: var(--ambra-scura);
-  position: relative;
-  display: inline-flex; align-items: center; gap: 0.2em;
-}
-.settori-cta em { font-style: normal; transition: transform var(--transizione); }
-.settori-card:hover .settori-cta em { transform: translateX(4px); }
+/* .settori-note riusata da #altri-servizi (nota centrata a fondo sezione). */
 .settori-note { text-align: center; font-size: 0.9rem; margin-top: 2.2rem; opacity: 0.8; }
 
 /* ---------- CTA finale ---------- */
@@ -941,7 +899,6 @@ section[id] { scroll-margin-top: var(--header-h); }
 /* ---------- Responsive ---------- */
 @media (max-width: 980px) {
   .offerta-grid { grid-template-columns: repeat(2, 1fr); }
-  .settori-grid { grid-template-columns: repeat(3, 1fr); }
   .offerta-banner { grid-template-columns: 1fr; }
   .offerta-banner-img { min-height: 180px; }
   .pricing-grid { grid-template-columns: repeat(2, 1fr); }
@@ -975,7 +932,6 @@ section[id] { scroll-margin-top: var(--header-h); }
   .offerta-grid { grid-template-columns: 1fr; }
   .offerta-contatto { flex-direction: column; text-align: center; }
   .offerta-contatto-cta { width: 100%; justify-content: center; }
-  .settori-grid { grid-template-columns: repeat(2, 1fr); }
   .pricing-grid { grid-template-columns: 1fr; }
   .extra-grid { grid-template-columns: 1fr; }
   .extra-bundle-grid { grid-template-columns: 1fr; }
@@ -987,7 +943,4 @@ section[id] { scroll-margin-top: var(--header-h); }
   .team-panel { flex: 0 0 220px; }
   .team-panel::after { opacity: 0.85; }
   .team-panel-info p { opacity: 1; transform: translateY(0); }
-}
-@media (max-width: 460px) {
-  .settori-grid { grid-template-columns: 1fr; }
 }
