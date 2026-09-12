@@ -396,27 +396,27 @@
   // Porting vanilla di FlameBand (catalogo-animazioni-21st/ember-footer-cta,
   // .tsx sorgente). Fascia di fuoco a celle su canvas, cresta a seno che
   // ondeggia, vento sul passaggio del puntatore, compositing plus-lighter.
-  // Ricolorata ambra (era indaco/violetto nel sorgente). Generica: montata sia
-  // in fondo a #cta-finale (banda fissa, il resto della sezione resta senza
-  // canvas) sia sull'intero footer (riempie il suo clientHeight reale) — le
-  // due bande sono contigue, la stessa fiamma "attraversa" il confine tra la
-  // sezione sondaggio e il footer invece di comparire solo in uno dei due.
-  function initFlameBand(mountEl, bandHeight) {
+  // Ricolorata ambra (era indaco/violetto nel sorgente). #cta-finale e
+  // <footer> sono stati uniti in un solo elemento (index.html) proprio perché
+  // qui monta UN SOLO canvas, sull'intero blocco: niente più due simulazioni
+  // indipendenti non sincronizzate alla giunzione tra sezione e footer.
+  function initFlameBand(mountEl) {
     var reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
     if (!mountEl || reduceMotion) return;
 
     var canvas = document.createElement("canvas");
     canvas.className = "flame-band-canvas";
     canvas.setAttribute("aria-hidden", "true");
-    if (bandHeight) {
-      canvas.style.height = bandHeight + "px";
-      canvas.style.top = "auto";
-    }
     mountEl.insertBefore(canvas, mountEl.firstChild);
     var ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     var CELL = 8, ALPHA = 70, SPEED = 30, WAVE = 1, WIND = 1, STEPS_F = 38;
+    // Probabilità di raffreddare una cella di 1 mentre risale di una riga
+    // (indipendente dal drift orizzontale sotto). Più bassa = fiamme più alte
+    // prima di spegnersi sotto la soglia visibile — misurato empiricamente
+    // con un campionamento dell'alpha del canvas, non a calcolo puro.
+    var COOL_CHANCE = 0.45;
     // indaco-950 (fondo) -> ember scuro -> ambra -> ambra-chiara (pallido)
     var STOPS = [[15, 17, 40], [140, 60, 10], [220, 140, 40], [250, 222, 165]];
 
@@ -446,7 +446,7 @@
 
     function size() {
       cols = Math.max(8, Math.ceil(mountEl.clientWidth / CELL));
-      rows = Math.max(6, Math.ceil((bandHeight || mountEl.clientHeight) / CELL));
+      rows = Math.max(6, Math.ceil(mountEl.clientHeight / CELL));
       canvas.width = cols; canvas.height = rows;
       m = new Uint8Array(cols * rows);
       img = ctx.createImageData(cols, rows);
@@ -500,7 +500,7 @@
           var drift = r4 > 1 ? r4 - 2 : 0;
           var w = windArr[xx];
           if (w !== 0 && Math.random() < Math.abs(w)) drift += w > 0 ? 1 : -1;
-          var decay = r4 & 1 ? 2 : 1;
+          var decay = Math.random() < COOL_CHANCE ? 1 : 0;
           var target = idx - cols + drift;
           m[Math.max(0, Math.min(cols * rows - 1, target))] = v > decay ? v - decay : 0;
         }
@@ -521,7 +521,6 @@
     }
     requestAnimationFrame(step);
   }
-  initFlameBand(document.getElementById("cta-finale"), 170);
   initFlameBand(document.getElementById("siteFooter"));
 
   // Scroll reveal

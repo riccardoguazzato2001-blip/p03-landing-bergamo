@@ -856,35 +856,35 @@ section[id] { scroll-margin-top: var(--header-h); }
 /* .settori-note riusata da #altri-servizi (nota centrata a fondo sezione). */
 .settori-note { text-align: center; font-size: 0.9rem; margin-top: 2.2rem; opacity: 0.8; }
 
-/* ---------- CTA finale ---------- */
-.cta-finale {
-  background: radial-gradient(120% 140% at 50% 0%, var(--indaco-800) 0%, var(--indaco-950) 60%);
-  color: var(--testo-chiaro);
-  text-align: center;
-  overflow: hidden; /* clippa la fascia di fuoco (vedi .flame-band-canvas) al bordo sezione */
-}
+/* ---------- CTA finale + Footer: un unico blocco (Riccardo, 2026-09-12) ---------
+   Prima erano due elementi adiacenti (sezione + <footer>) con due canvas-fuoco
+   indipendenti e non sincronizzati: si vedeva la giunzione. Ora il fondo/colore
+   vive UNA sola volta su .site-footer (l'elemento che il canvas monta), e
+   #cta-finale al suo interno è solo layout/padding — sfondo trasparente,
+   eredita quello del genitore. Risultato: un solo sfondo, una sola fiamma. */
+.cta-finale { text-align: center; }
 .cta-finale h2 { color: var(--testo-chiaro); margin-inline: auto; }
-.cta-finale-inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
+.cta-finale-inner { display: flex; flex-direction: column; align-items: center; }
 /* era `margin-inline: auto 2rem` = margine sinistro auto + destro 2rem: in un
    flex-column gli auto-margin battono align-items:center, quindi il paragrafo
    finiva spinto a destra invece che centrato. L'intento originale era il
    distacco di 2rem SOTTO, prima del bottone. */
 .cta-finale-lead { color: rgba(244,241,234,0.8); max-width: 52ch; margin: 0 auto 2rem; }
 
-/* ---------- Footer ---------- */
+/* ---------- Footer (ora include anche #cta-finale, vedi sopra) ---------- */
 .site-footer {
   position: relative; overflow: hidden;
-  background: var(--indaco-950); color: rgba(244,241,234,0.6); padding: 2rem 0; text-align: center;
+  background: radial-gradient(120% 90% at 50% 0%, var(--indaco-800) 0%, var(--indaco-950) 55%);
+  color: rgba(244,241,234,0.6); padding: 2rem 0; text-align: center;
 }
 /* Porting vanilla di FlameBand (catalogo-animazioni-21st/ember-footer-cta):
    fascia di fuoco a celle su canvas, compositing plus-lighter, ricolorata
-   ambra (era indaco/violetto nel .tsx sorgente) per restare in palette col
-   resto del sito. Montata sia in fondo a #cta-finale (banda fissa 170px, via
-   initFlameBand(el, 170)) sia sull'intero footer (riempie il suo clientHeight
-   reale, initFlameBand(el) senza altezza) — stessa fiamma "attraversa" il
-   confine tra sezione sondaggio e footer invece di comparire solo in uno dei
-   due. inset:0 di default; JS imposta top:auto + height fissa per la banda
-   ancorata al fondo (bottom:0 resta da qui, la ancora in basso). */
+   ambra (era indaco/violetto nel .tsx sorgente). UN SOLO canvas che riempie
+   l'intero .site-footer (che ora contiene #cta-finale + il blocco brand/link)
+   — niente più giunzione tra due simulazioni indipendenti. Fiamme più alte:
+   vedi costante `decay` in initFlameBand (script.js), non l'altezza del
+   canvas — il canvas riempie comunque tutto il blocco, è la fisica che decide
+   quanto in alto arriva il fuoco prima di spegnersi. */
 .flame-band-canvas {
   position: absolute; inset: 0; width: 100%; height: 100%;
   mix-blend-mode: plus-lighter; pointer-events: none;
