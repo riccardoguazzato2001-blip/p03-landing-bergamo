@@ -861,9 +861,10 @@ section[id] { scroll-margin-top: var(--header-h); }
   background: radial-gradient(120% 140% at 50% 0%, var(--indaco-800) 0%, var(--indaco-950) 60%);
   color: var(--testo-chiaro);
   text-align: center;
+  overflow: hidden; /* clippa la fascia di fuoco (vedi .flame-band-canvas) al bordo sezione */
 }
 .cta-finale h2 { color: var(--testo-chiaro); margin-inline: auto; }
-.cta-finale-inner { display: flex; flex-direction: column; align-items: center; }
+.cta-finale-inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
 /* era `margin-inline: auto 2rem` = margine sinistro auto + destro 2rem: in un
    flex-column gli auto-margin battono align-items:center, quindi il paragrafo
    finiva spinto a destra invece che centrato. L'intento originale era il
@@ -878,9 +879,13 @@ section[id] { scroll-margin-top: var(--header-h); }
 /* Porting vanilla di FlameBand (catalogo-animazioni-21st/ember-footer-cta):
    fascia di fuoco a celle su canvas, compositing plus-lighter, ricolorata
    ambra (era indaco/violetto nel .tsx sorgente) per restare in palette col
-   resto del sito. Riempie l'intera altezza del footer (dimensionata dal suo
-   stesso clientHeight, non un'altezza fissa come nell'originale). */
-.site-footer-flame {
+   resto del sito. Montata sia in fondo a #cta-finale (banda fissa 170px, via
+   initFlameBand(el, 170)) sia sull'intero footer (riempie il suo clientHeight
+   reale, initFlameBand(el) senza altezza) — stessa fiamma "attraversa" il
+   confine tra sezione sondaggio e footer invece di comparire solo in uno dei
+   due. inset:0 di default; JS imposta top:auto + height fissa per la banda
+   ancorata al fondo (bottom:0 resta da qui, la ancora in basso). */
+.flame-band-canvas {
   position: absolute; inset: 0; width: 100%; height: 100%;
   mix-blend-mode: plus-lighter; pointer-events: none;
   image-rendering: pixelated;

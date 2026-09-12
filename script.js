@@ -393,20 +393,26 @@
   }
   initEmberButton();
 
-  // Footer: porting vanilla di FlameBand (catalogo-animazioni-21st/ember-footer-cta,
+  // Porting vanilla di FlameBand (catalogo-animazioni-21st/ember-footer-cta,
   // .tsx sorgente). Fascia di fuoco a celle su canvas, cresta a seno che
   // ondeggia, vento sul passaggio del puntatore, compositing plus-lighter.
-  // Ricolorata ambra (era indaco/violetto nel sorgente) e dimensionata
-  // sull'altezza reale del footer (non un'altezza fissa come nell'originale).
-  function initFooterFlame() {
-    var footer = document.getElementById("siteFooter");
+  // Ricolorata ambra (era indaco/violetto nel sorgente). Generica: montata sia
+  // in fondo a #cta-finale (banda fissa, il resto della sezione resta senza
+  // canvas) sia sull'intero footer (riempie il suo clientHeight reale) — le
+  // due bande sono contigue, la stessa fiamma "attraversa" il confine tra la
+  // sezione sondaggio e il footer invece di comparire solo in uno dei due.
+  function initFlameBand(mountEl, bandHeight) {
     var reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-    if (!footer || reduceMotion) return;
+    if (!mountEl || reduceMotion) return;
 
     var canvas = document.createElement("canvas");
-    canvas.className = "site-footer-flame";
+    canvas.className = "flame-band-canvas";
     canvas.setAttribute("aria-hidden", "true");
-    footer.insertBefore(canvas, footer.firstChild);
+    if (bandHeight) {
+      canvas.style.height = bandHeight + "px";
+      canvas.style.top = "auto";
+    }
+    mountEl.insertBefore(canvas, mountEl.firstChild);
     var ctx = canvas.getContext("2d");
     if (!ctx) return;
 
@@ -439,15 +445,15 @@
     var cols = 8, rows = 8, m = new Uint8Array(0), img = null, windArr = new Float32Array(0);
 
     function size() {
-      cols = Math.max(8, Math.ceil(footer.clientWidth / CELL));
-      rows = Math.max(6, Math.ceil(footer.clientHeight / CELL));
+      cols = Math.max(8, Math.ceil(mountEl.clientWidth / CELL));
+      rows = Math.max(6, Math.ceil((bandHeight || mountEl.clientHeight) / CELL));
       canvas.width = cols; canvas.height = rows;
       m = new Uint8Array(cols * rows);
       img = ctx.createImageData(cols, rows);
       windArr = new Float32Array(cols);
     }
     size();
-    if ("ResizeObserver" in window) new ResizeObserver(size).observe(footer);
+    if ("ResizeObserver" in window) new ResizeObserver(size).observe(mountEl);
 
     var pointer = { x: 0, y: 0, lastX: 0, vel: 0, active: false };
     window.addEventListener("pointermove", function (e) {
@@ -515,7 +521,8 @@
     }
     requestAnimationFrame(step);
   }
-  initFooterFlame();
+  initFlameBand(document.getElementById("cta-finale"), 170);
+  initFlameBand(document.getElementById("siteFooter"));
 
   // Scroll reveal
   var revealEls = document.querySelectorAll(".reveal");
