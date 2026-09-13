@@ -3,8 +3,9 @@
   "use strict";
 
   var header = document.getElementById("siteHeader");
-  var nav = document.getElementById("mainNav");
   var navToggle = document.getElementById("navToggle");
+  var circularNav = document.getElementById("circularNav");
+  var circularNavClose = document.getElementById("circularNavClose");
 
   function onScroll() {
     if (window.scrollY > 40) {
@@ -16,18 +17,37 @@
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
+  // Menu mobile: navigazione circolare (porting vanilla di
+  // circular-navigation-bar.tsx). #navToggle apre/chiude, invariato
+  // rispetto al vecchio pannello a scomparsa che sostituisce.
+  function openCircularNav() {
+    circularNav.classList.add("open");
+    navToggle.classList.add("open");
+    navToggle.setAttribute("aria-expanded", "true");
+    document.body.style.overflow = "hidden";
+  }
+  function closeCircularNav() {
+    circularNav.classList.remove("open");
+    navToggle.classList.remove("open");
+    navToggle.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+  }
   navToggle.addEventListener("click", function () {
-    var isOpen = nav.classList.toggle("open");
-    navToggle.classList.toggle("open", isOpen);
-    navToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    if (circularNav.classList.contains("open")) {
+      closeCircularNav();
+    } else {
+      openCircularNav();
+    }
   });
-
-  nav.querySelectorAll("a").forEach(function (link) {
-    link.addEventListener("click", function () {
-      nav.classList.remove("open");
-      navToggle.classList.remove("open");
-      navToggle.setAttribute("aria-expanded", "false");
-    });
+  circularNavClose.addEventListener("click", closeCircularNav);
+  circularNav.addEventListener("click", function (e) {
+    if (e.target === circularNav) closeCircularNav();
+  });
+  circularNav.querySelectorAll(".circular-nav-item").forEach(function (link) {
+    link.addEventListener("click", closeCircularNav);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && circularNav.classList.contains("open")) closeCircularNav();
   });
 
   // Dock nav (desktop): porting di dock.tsx (21st.dev/framer-motion) in JS

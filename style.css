@@ -132,6 +132,9 @@ section[id] { scroll-margin-top: var(--header-h); }
   .brand-wordmark { display: none; }
 }
 
+/* .nav: non più usata in index.html (menu mobile ora è .circular-nav
+   sotto), ma resta il link "← Torna al sito" dell'header di privacy.html
+   — tenuta qui solo per quello, non toccare senza controllare privacy.html. */
 .nav { display: flex; align-items: center; gap: 1.8rem; }
 .nav a {
   font-size: 0.92rem; font-weight: 500;
@@ -142,22 +145,13 @@ section[id] { scroll-margin-top: var(--header-h); }
   transition: opacity var(--transizione), color var(--transizione);
 }
 .site-header.scrolled .nav a { color: var(--indaco-900); }
-.nav a:not(.nav-cta)::after {
+.nav a::after {
   content: ""; position: absolute; left: 0; bottom: 0;
   width: 0; height: 2px; background: var(--ambra);
   transition: width var(--transizione);
 }
-.nav a:not(.nav-cta):hover { opacity: 1; }
-.nav a:not(.nav-cta):hover::after { width: 100%; }
-.nav-cta {
-  background: var(--ambra);
-  color: var(--indaco-950) !important;
-  padding: 0.55rem 1.1rem;
-  border-radius: 999px;
-  font-weight: 600;
-  opacity: 1 !important;
-}
-.nav-cta:hover { background: var(--ambra-scura); }
+.nav a:hover { opacity: 1; }
+.nav a:hover::after { width: 100%; }
 
 .nav-toggle {
   display: none;
@@ -176,12 +170,89 @@ section[id] { scroll-margin-top: var(--header-h); }
 }
 .site-header.scrolled .nav-toggle span { background: var(--indaco-900); }
 
+/* ---------- Menu mobile: navigazione circolare ----------
+   Porting vanilla di circular-navigation-bar.tsx: overlay fullscreen +
+   pannello circolare, item posizionati con lo stesso trucco rotate()
+   translate() rotate(-) dell'originale (qui via custom property --angle,
+   impostata inline per item invece che calcolata in JS). Attivo solo
+   sotto i 720px (vedi override "display:none" nel media query desktop
+   più sotto) — stesso z-index (99) del vecchio pannello a scomparsa
+   che sostituisce, così resta sotto il cookie banner (500) come prima. */
+.circular-nav {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 17, 40, 0.82);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transizione), visibility var(--transizione);
+}
+.circular-nav.open { opacity: 1; visibility: visible; }
+.circular-nav-panel {
+  position: relative;
+  width: min(80vw, 320px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(244, 241, 234, 0.05);
+  border: 1px solid rgba(244, 241, 234, 0.14);
+  box-shadow: inset 2px 2px 2px rgba(244, 241, 234, 0.3), inset -1px -1px 1px rgba(244, 241, 234, 0.16);
+  transform: scale(0.4);
+  opacity: 0;
+  transition: transform var(--transizione), opacity var(--transizione);
+}
+.circular-nav.open .circular-nav-panel { transform: scale(1); opacity: 1; }
+.circular-nav-close {
+  position: absolute;
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: var(--panna);
+  color: var(--indaco-950);
+  border: none;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  z-index: 1;
+}
+.circular-nav-close svg { width: 20px; height: 20px; }
+.circular-nav-item {
+  position: absolute;
+  --nav-radius: 108px;
+  width: 74px; height: 74px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  color: var(--testo-chiaro);
+  text-align: center;
+  transform: rotate(var(--angle)) translate(var(--nav-radius)) rotate(calc(var(--angle) * -1));
+  transition: background var(--transizione), color var(--transizione);
+}
+.circular-nav-item:hover, .circular-nav-item:focus-visible { background: var(--panna); color: var(--indaco-950); }
+.circular-nav-item-cta { background: var(--ambra); color: var(--indaco-950); }
+.circular-nav-item-cta:hover, .circular-nav-item-cta:focus-visible { background: var(--ambra-scura); }
+.circular-nav-icon { width: 26px; height: 26px; pointer-events: none; }
+.circular-nav-icon svg { width: 100%; height: 100%; display: block; }
+.circular-nav-label { font-size: 0.66rem; font-weight: 600; line-height: 1.15; pointer-events: none; }
+@media (min-width: 400px) {
+  .circular-nav-panel { width: min(80vw, 360px); }
+  .circular-nav-item { --nav-radius: 128px; }
+}
+@media (min-width: 721px) {
+  .circular-nav { display: none !important; }
+}
+
 /* ---------- Dock nav (desktop) ----------
-   Sostituisce .nav sopra i 720px. .nav resta il pannello fullscreen
-   mobile (invariato). Non più dentro l'header: pill fisso, staccato,
-   centrato in orizzontale sulla viewport. Fisica magnify in
-   initDockNav() — script.js. */
-.nav { display: none; }
+   Sostituita sotto i 720px dal menu circolare (.circular-nav più sotto).
+   Non è dentro l'header: pill fisso, staccato, centrato in orizzontale
+   sulla viewport. Fisica magnify in initDockNav() — script.js. */
 .dock-nav {
   position: fixed;
   top: 18px;
@@ -939,24 +1010,6 @@ section[id] { scroll-margin-top: var(--header-h); }
   .extra-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 720px) {
-  .nav {
-    display: flex;
-    position: fixed; inset: 0 0 0 auto;
-    height: 100dvh;
-    width: min(78vw, 320px);
-    background: var(--indaco-950);
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: 1.6rem;
-    padding: calc(var(--header-h) + 1.5rem) 1.8rem 2rem;
-    transform: translateX(100%);
-    transition: transform var(--transizione);
-    z-index: 99;
-  }
-  .nav.open { transform: translateX(0); }
-  .nav a { color: var(--testo-chiaro) !important; font-size: 1.05rem; }
-  .nav-cta { width: 100%; text-align: center; }
   .dock-nav { display: none; }
   .nav-toggle { display: flex; }
   .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
