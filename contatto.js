@@ -8,7 +8,7 @@
 
   // URL della web app Apps Script (dopo il deploy manuale, vedi apps-script/LEGGIMI-deploy.md).
   // Vuoto = modalità dimostrativa: il form apre un mailto pre-compilato invece di POSTare.
-  var INFO_FORM_BACKEND_URL = "";
+  var INFO_FORM_BACKEND_URL = "https://script.google.com/macros/s/AKfycbzAXzkYfDNGtp6jrEZgdZw7w6GvyBIxO7r6lmWdV3SUFEL3S5satdi7fMw2h2RIiZbpYw/exec";
 
   var params = new URLSearchParams(window.location.search);
   var pacchetto = params.get("pacchetto") || "";
