@@ -4,9 +4,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Privacy &amp; Cookie — QUADRALABS</title>
-<meta name="robots" content="noindex">
+<title>Richiedi informazioni — QUADRALABS</title>
+<meta name="description" content="Raccontaci la tua attività: ti ricontattiamo per parlare del tuo sito, senza impegno.">
 <link rel="icon" type="image/svg+xml" href="img/quadra-logo-icona.svg">
+<meta name="theme-color" content="#171a3d">
 <link rel="stylesheet" href="fonts/fonts.css">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -45,75 +46,95 @@
   </div>
 </header>
 
-<main class="container" style="max-width: 760px; padding: calc(76px + 3rem) 0 5rem;">
-  <p class="kicker">Informativa</p>
-  <h1 style="margin-bottom: 1.4rem;">Privacy &amp; Cookie</h1>
-  <p style="font-size: 0.9rem; color: var(--testo-tenue); margin-bottom: 2rem;">Ultimo aggiornamento: 12 agosto 2026</p>
+<main class="contatto-main">
+  <div class="container contatto-grid">
 
-  <h3 style="margin: 1.6rem 0 0.5rem; font-family: var(--font-display);">Chi siamo</h3>
-  <p>Questo sito è realizzato da <strong>QUADRALABS</strong>, un team di studenti di Ingegneria Gestionale
-  dell'Università di Bergamo, nell'ambito di un progetto in fase di validazione commerciale.
-  <strong>Non siamo (ancora) una società costituita</strong> — questo sito e le demo collegate servono a
-  presentare il lavoro e capire se l'idea ha mercato, non a vendere un servizio già strutturato.
-  Per qualsiasi domanda su questa informativa o sui tuoi dati: <a href="mailto:info@quadralabs.eu">info@quadralabs.eu</a>.</p>
+    <div class="contatto-intro">
+      <p class="kicker" id="contattoBadge">Richiesta informazioni</p>
+      <h1>Raccontaci la tua attività, pensiamo noi al resto</h1>
 
-  <h3 style="margin: 1.6rem 0 0.5rem; font-family: var(--font-display);">Quali dati raccogliamo, e dove</h3>
-  <p>Questa pagina e la landing (<a href="index.html">index.html</a>) di per sé <strong>non hanno moduli che
-  raccolgono dati</strong>: sono contenuti statici, ospitati come semplici pagine HTML senza backend.
-  Se scegli di rispondere al sondaggio collegato (link "Dì la tua" / CTA finale, ospitato su un dominio
-  separato) i dati che inserisci lì — es. nome dell'attività, contatti, risposte — vengono raccolti secondo
-  l'informativa mostrata su quella pagina, non da noi direttamente. Le demo per settore linkate da questa
-  landing (le "Esempi per settore") sono dimostrazioni tecniche indipendenti, ciascuna con la propria pagina
-  privacy quando raccoglie dati. Se ti scriviamo o ci scrivi (email, WhatsApp, di persona), trattiamo i dati
-  di contatto che ci lasci solo per risponderti e valutare un'eventuale collaborazione futura.</p>
+      <ul class="contatto-bullets">
+        <li>Prima chiamata gratuita per capire cosa ti serve davvero</li>
+        <li>Sito online in 2-3 settimane, senza pensieri per te</li>
+        <li>Dominio sempre intestato a te, mai a noi</li>
+      </ul>
 
-  <h3 style="margin: 1.6rem 0 0.5rem; font-family: var(--font-display);">Font e risorse</h3>
-  <p>I caratteri tipografici di questo sito (Space Grotesk, Inter) sono ospitati sul nostro stesso hosting
-  (self-hosted), non tramite Google Fonts o altri CDN esterni: visitando questa pagina il tuo browser non
-  invia richieste dirette a terze parti per caricare i font. Anche le icone e il logo sono file inline,
-  nessuna risorsa esterna caricata a parte le immagini fotografiche ospitate qui stesso.</p>
+      <div class="contatto-photos">
+        <img src="img/contatto/proprietario-negozio.jpg" alt="Titolare di un'attività bergamasca guarda il nuovo sito sul laptop, nel proprio negozio" loading="lazy" width="1024" height="768">
+        <img src="img/contatto/laptop-dettaglio.jpg" alt="Laptop aperto su un sito web, in un'ambientazione calda" loading="lazy" width="1024" height="768">
+      </div>
+    </div>
 
-  <h3 style="margin: 1.6rem 0 0.5rem; font-family: var(--font-display);">Cookie</h3>
-  <p>Questo sito usa <strong>Google Analytics 4</strong> per capire in forma aggregata come viene
-  usato (pagine visitate, tempo di permanenza, provenienza del traffico) — <strong>non per
-  pubblicità e non per profilazione individuale</strong>. Lo script parte solo dopo che scegli
-  "Accetta" nel banner cookie mostrato alla prima visita: se scegli "Rifiuta" o chiudi il banner
-  senza rispondere, Google Analytics resta disattivato e nessun cookie viene installato.</p>
-  <p>Se accetti, il tuo browser scarica lo script <code>gtag.js</code> da Google e imposta cookie
-  tecnici di Google Analytics (es. <code>_ga</code>, <code>_ga_*</code>), con durata fino a 2 anni,
-  usati solo per distinguere le sessioni in forma statistica. L'indirizzo IP viene troncato prima
-  di essere salvato (<code>anonymize_ip</code>). Titolare di questi dati per la parte tecnica è
-  Google Ireland Ltd. — informativa di Google:
-  <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a>.</p>
-  <p>Puoi cambiare idea in qualsiasi momento:
-  <button type="button" id="resetCookieConsent" style="background:none;border:1px solid var(--bordo);border-radius:999px;padding:0.4rem 1rem;font:inherit;font-size:0.85rem;cursor:pointer;color:var(--testo);">Gestisci preferenze cookie</button>
-  — cancella la scelta salvata e ti rimostra il banner al prossimo caricamento della pagina.</p>
+    <div class="contatto-form-wrap">
+      <form id="contattoForm" novalidate>
+        <input type="hidden" name="pacchetto" id="contattoPacchetto">
 
-  <h3 style="margin: 1.6rem 0 0.5rem; font-family: var(--font-display);">I tuoi diritti</h3>
-  <p>Puoi chiedere in ogni momento accesso, rettifica o cancellazione dei dati che ci hai lasciato
-  scrivendo a <a href="mailto:info@quadralabs.eu">info@quadralabs.eu</a> (artt. 15-22 Reg. UE 2016/679 — GDPR).</p>
+        <div class="info-field-row">
+          <label class="info-field">
+            <span>Nome e cognome *</span>
+            <input type="text" name="nome" required autocomplete="name">
+          </label>
+          <label class="info-field">
+            <span>Attività (se ce l'hai)</span>
+            <input type="text" name="attivita" autocomplete="organization">
+          </label>
+        </div>
+        <div class="info-field-row">
+          <label class="info-field">
+            <span>Telefono *</span>
+            <input type="tel" name="telefono" required autocomplete="tel">
+          </label>
+          <label class="info-field">
+            <span>Email *</span>
+            <input type="email" name="email" required autocomplete="email">
+          </label>
+        </div>
+        <label class="info-field">
+          <span>Messaggio (facoltativo)</span>
+          <textarea name="messaggio" rows="3"></textarea>
+        </label>
+        <label class="info-field info-field-checkbox">
+          <input type="checkbox" name="consenso" required>
+          <span>Ho letto l'<a href="privacy.html" target="_blank" rel="noopener">informativa privacy</a> e acconsento a essere ricontattato/a.</span>
+        </label>
 
-  <p style="margin-top: 2rem; padding: 1rem 1.2rem; border-radius: var(--radius-sm); background: var(--panna-alt); font-size: 0.85rem; color: var(--testo-tenue);">
-  &#9888;&#65039; <strong>Nota interna (da togliere solo dopo revisione):</strong> questo testo è una bozza scritta con
-  supporto AI per colmare un vuoto di trasparenza minima durante la fase di validazione — non è una certificazione
-  legale. Prima di scalare la distribuzione (stampa biglietti, più traffico) vale la pena un check veloce con lo
-  sportello startup della Camera di Commercio di Bergamo o un breve consulto con un commercialista, soprattutto
-  quando si inizierà a raccogliere dati in modo sistematico o a incassare denaro.</p>
+        <button type="submit" class="btn btn-primary btn-lg info-form-submit" id="contattoSubmit">
+          <span class="info-form-submit-label">Invia la richiesta</span>
+        </button>
+        <p class="info-form-status" id="contattoStatus" role="status" aria-live="polite" hidden></p>
+      </form>
+
+      <p class="contatto-privacy-note">
+        Inviando questo modulo accetti la nostra <a href="privacy.html">Privacy Policy</a>.
+        I tuoi dati sono usati solo per ricontattarti in merito alla tua richiesta.
+      </p>
+    </div>
+  </div>
+
+  <div class="container contatto-faq">
+    <div class="contatto-faq-item">
+      <h3>Cosa succede dopo l'invio?</h3>
+      <p>Ti ricontattiamo entro 24-48h per la prima chiamata conoscitiva.</p>
+    </div>
+    <div class="contatto-faq-item">
+      <h3>Quanto ci vuole?</h3>
+      <p>Il progetto mediamente ha una durata di 2/3 settimane, poi dipende tutto dalla complessità del risultato che si vuole ottenere.</p>
+    </div>
+    <div class="contatto-faq-item">
+      <h3>Cosa devo fornirti io?</h3>
+      <p>In una prima chiamata con noi definiremo tutto quello che ci serve, il lavoro sarà poi interamente a carico nostro.</p>
+    </div>
+  </div>
 </main>
 
 <footer class="site-footer">
   <div class="container footer-inner">
     <p><strong>QUADRALABS</strong> — Bergamo</p>
     <p class="footer-sub">Progetto indipendente, non affiliato ad alcuna web agency</p>
+    <p class="footer-sub"><a href="privacy.html">Privacy &amp; Cookie</a></p>
   </div>
 </footer>
 
-<script>
-  // Stesso GA_CONSENT_KEY di script.js (duplicato qui: questa pagina non carica script.js).
-  document.getElementById("resetCookieConsent").addEventListener("click", function () {
-    try { localStorage.removeItem("quadralabs-consent"); } catch (e) {}
-    window.location.href = "index.html";
-  });
-</script>
+<script src="contatto.js"></script>
 </body>
 </html>
