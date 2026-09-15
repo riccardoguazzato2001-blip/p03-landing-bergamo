@@ -230,8 +230,11 @@
   // componenti di Kevin). Stessa geometria/formula del sorgente React (nessuna
   // dipendenza framer-motion lì, quindi il porting è 1:1): due carreggiate di
   // card che avanzano in prospettiva, @keyframes calcolati e iniettati a
-  // runtime invece che con hook React. Le sei immagini sono le stesse
-  // screenshot già usate nella striscia sottostante (img/portfolio/).
+  // runtime invece che con hook React. Prime 6 immagini: stesse screenshot
+  // già usate nella striscia sottostante (img/portfolio/). Le altre 10 sono
+  // mockup di siti d'esempio generati via fal-ai (nano-banana-pro, 2026-09-15,
+  // testo italiano esplicito nel prompt) — non sono progetti reali, servono
+  // solo a dare varietà visiva al corridoio (alt="" su ogni card, decorativo).
   function initLavoriStream() {
     var mount = document.querySelector(".lavori-stream");
     if (!mount) return;
@@ -242,7 +245,17 @@
       "img/portfolio/pizzeria-home.jpg",
       "img/portfolio/hotel-borghetto-home.jpg",
       "img/portfolio/ink-factory-home.jpg",
-      "img/portfolio/ottobassotto-home.jpg"
+      "img/portfolio/ottobassotto-home.jpg",
+      "img/portfolio/trattoria-borgo-home.jpg",
+      "img/portfolio/trattoria-borgo-menu.jpg",
+      "img/portfolio/parrucchieri-servizi.jpg",
+      "img/portfolio/estetica-bellavita-galleria.jpg",
+      "img/portfolio/pasticceria-dolcenote-home.jpg",
+      "img/portfolio/agriturismo-camere.jpg",
+      "img/portfolio/palestra-energia-team.jpg",
+      "img/portfolio/studio-movimentosano-contatti.jpg",
+      "img/portfolio/falegnameria-lavori.jpg",
+      "img/portfolio/rifugio-stellaalpina-home.jpg"
     ];
 
     // Stessi default di CorridorPath nel sorgente .tsx.
