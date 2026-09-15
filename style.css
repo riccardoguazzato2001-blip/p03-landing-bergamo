@@ -439,6 +439,51 @@ section[id] { scroll-margin-top: var(--header-h); }
   max-width: 18ch;
 }
 .text-ambra { color: var(--ambra-chiara); }
+
+/* Coda hero a rotazione: porting vanilla di text-rotate.tsx
+   (catalogo-animazioni-21st/text-rotate/, motion/react -> CSS @keyframes +
+   stagger per-carattere via animation-delay). AnimatePresence "wait" del
+   sorgente = uscita ed entrata sono sequenziali, mai sovrapposte: niente
+   posizionamento assoluto necessario, i caratteri vivono nel flusso normale. */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+.hero-rotate { position: relative; }
+.hero-rotate-chars {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  /* gap, non uno spazio testuale tra le parole: un text-node di solo
+     spazio come figlio diretto di un container flex/inline-flex viene
+     scartato dal layout (le parole si univano: "senzapensieri"). */
+  gap: 0 0.28em;
+  /* riserva 2 righe (font-size ereditato da .hero h1): "pronto in pochi
+     giorni" va a capo dentro il max-width:18ch dell'h1, le altre frasi no —
+     senza riserva, il testo sotto (.hero-sub/.hero-actions) salterebbe di
+     una riga ogni volta che la frase cambia. */
+  min-height: calc(2 * 1.12em);
+}
+.hero-rotate-word { display: inline-flex; }
+.hero-rotate-char {
+  display: inline-block;
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation-fill-mode: both;
+}
+.hero-rotate-char.is-enter { animation-name: hero-rotate-in; }
+.hero-rotate-char.is-exit { animation-name: hero-rotate-out; }
+@keyframes hero-rotate-in {
+  from { opacity: 0; transform: translateY(100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes hero-rotate-out {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-120%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-rotate-char { animation: none !important; opacity: 1; transform: none; }
+}
 .hero-sub {
   color: rgba(244, 241, 234, 0.85);
   font-size: clamp(1rem, 1.6vw, 1.2rem);

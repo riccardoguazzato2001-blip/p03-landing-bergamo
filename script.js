@@ -154,6 +154,77 @@
   }
   initOffertaSpotlight();
 
+  // Coda hero a rotazione ("senza pensieri" / "pronto in pochi giorni" / ...):
+  // porting vanilla di text-rotate.tsx (catalogo-animazioni-21st/text-rotate/,
+  // motion/react -> CSS @keyframes, questo script costruisce/anima gli span).
+  // AnimatePresence "wait" del sorgente = uscita completa prima dell'entrata
+  // (sequenziale, mai sovrapposta): niente posizionamento assoluto.
+  function initHeroTextRotate() {
+    var wrap = document.getElementById("heroRotate");
+    var charsEl = document.getElementById("heroRotateChars");
+    var srEl = document.getElementById("heroRotateSR");
+    if (!wrap || !charsEl || !srEl) return;
+
+    var PHRASES = ["senza pensieri", "pronto in pochi giorni", "che trova clienti", "senza tecnicismi"];
+    var ROTATION_INTERVAL = 2800; // ms
+    var STAGGER = 0.03; // secondi per carattere, staggerFrom "last" come il sorgente
+    var DURATION = 0.5; // secondi, deve combaciare con --hero-rotate-duration in CSS
+
+    var reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+    // Costruisce gli span per-parola/per-carattere di `text`, con
+    // animation-delay a cascata dall'ultimo carattere (staggerFrom "last").
+    // `cls` è la classe di stato da applicare (nessuna per il render iniziale
+    // statico, "is-enter" per un'entrata animata).
+    function buildChars(text, cls) {
+      charsEl.innerHTML = "";
+      var words = text.split(" ");
+      var totalChars = text.replace(/ /g, "").length;
+      var charIndex = 0;
+      words.forEach(function (word) {
+        var wordEl = document.createElement("span");
+        wordEl.className = "hero-rotate-word";
+        Array.prototype.forEach.call(word, function (ch) {
+          var charEl = document.createElement("span");
+          charEl.className = "hero-rotate-char" + (cls ? " " + cls : "");
+          charEl.textContent = ch;
+          var fromEnd = totalChars - 1 - charIndex;
+          charEl.style.animationDelay = (fromEnd * STAGGER) + "s";
+          wordEl.appendChild(charEl);
+          charIndex++;
+        });
+        charsEl.appendChild(wordEl);
+      });
+      return totalChars;
+    }
+
+    var index = 0;
+    buildChars(PHRASES[0], null);
+    srEl.textContent = PHRASES[0];
+
+    if (reduceMotion) return; // frase iniziale ferma, niente rotazione
+
+    function tick() {
+      index = (index + 1) % PHRASES.length;
+      var nextText = PHRASES[index];
+
+      var exitChars = Array.prototype.slice.call(charsEl.querySelectorAll(".hero-rotate-char"));
+      var exitCount = exitChars.length;
+      exitChars.forEach(function (el, i) {
+        el.style.animationDelay = ((exitCount - 1 - i) * STAGGER) + "s";
+        el.className = "hero-rotate-char is-exit";
+      });
+      var exitTotal = (exitCount ? (exitCount - 1) * STAGGER : 0) + DURATION;
+
+      setTimeout(function () {
+        srEl.textContent = nextText;
+        buildChars(nextText, "is-enter");
+      }, exitTotal * 1000);
+    }
+    setInterval(tick, ROTATION_INTERVAL);
+  }
+  initHeroTextRotate();
+
   // Corridoio screenshot in #lavori: porting vanilla di image-stream-hero.tsx
   // (idee/elenco/P03-.../catalogo-animazioni-21st/image-stream-hero/, catalogo
   // componenti di Kevin). Stessa geometria/formula del sorgente React (nessuna
