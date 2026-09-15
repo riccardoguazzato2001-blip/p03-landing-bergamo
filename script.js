@@ -721,7 +721,12 @@
   }
   if (pricingTabCards && pricingTabTable) {
     pricingTabCards.addEventListener("click", function () { selectPricingTab(false); });
-    pricingTabTable.addEventListener("click", function () { selectPricingTab(true); });
+    pricingTabTable.addEventListener("click", function () {
+      selectPricingTab(true);
+      if (pricingTablePanel) {
+        pricingTablePanel.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
   }
 
   var pricingSwitch = document.getElementById("pricingSwitch");
