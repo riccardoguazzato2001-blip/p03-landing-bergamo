@@ -306,9 +306,14 @@
     stage.style.cssText = "position:absolute;inset:0;transform-style:preserve-3d;";
     perspectiveLayer.appendChild(stage);
 
-    [railRight, railLeft].forEach(function (railName) {
+    [railRight, railLeft].forEach(function (railName, railIdx) {
       for (var i = 0; i < cards; i++) {
-        var img = images[i % images.length];
+        // Offset per carreggiata: con più immagini di quante card ci stiano
+        // (cards < images.length), le due carreggiate leggendo lo stesso
+        // range i=0..cards-1 mostrerebbero sempre lo stesso sottoinsieme
+        // fisso, non l'intero array. Lo sfasamento fa in modo che, insieme,
+        // le due carreggiate coprano tutto l'array (o il più possibile).
+        var img = images[(i + railIdx * cards) % images.length];
         var cardEl = document.createElement("div");
         cardEl.className = cardCls;
         cardEl.style.cssText =
