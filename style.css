@@ -532,12 +532,13 @@ section[id] { scroll-margin-top: var(--header-h); }
    Riccardo): niente JS, l'espansione al passaggio del mouse è puro CSS —
    .team-carousel:hover .team-panel abbassa flex-grow su tutti i pannelli,
    .team-panel:hover lo rialza solo su quello sotto al puntatore.
-   Foto: Kevin (img/team-kevin.jpg), Riccardo (img/team-riccardo.jpg) e Andrea
-   (img/team-andrea.jpg) hanno una foto vera — ritratti reali con sfondo brand
-   indaco + logo 3D sfocato generati via fal-ai (Riccardo 2026-09-09, Kevin
-   2026-09-10, Andrea 2026-09-17), non foto finte delle persone. Niccolò usa
-   ancora un avatar a iniziali finché non fornisce una foto reale — niente
-   ritratti finti generati, per la regola "nome e faccia veri".
+   Foto: Kevin (img/team-kevin.jpg), Riccardo (img/team-riccardo.jpg), Andrea
+   (img/team-andrea.jpg) e Niccolò (img/team-niccolo.jpg) hanno una foto vera —
+   ritratti reali con sfondo brand indaco + logo 3D sfocato generati via fal-ai
+   (Riccardo 2026-09-09, Kevin 2026-09-10, Andrea 2026-09-17, Niccolò
+   2026-09-20), non foto finte delle persone: la faccia è quella reale, cambia
+   solo lo sfondo. .team-panel-avatar resta definita sotto ma oggi non è più
+   usata da nessuna card — servirà per un futuro membro senza foto.
    Il ruolo di Andrea resta da confermare.
    Prompt per generare le foto team mancanti: prompt-foto-team-sfondo-brand.md */
 .team { background: var(--panna); }
