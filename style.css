@@ -539,7 +539,7 @@ section[id] { scroll-margin-top: var(--header-h); }
    2026-09-20), non foto finte delle persone: la faccia è quella reale, cambia
    solo lo sfondo. .team-panel-avatar resta definita sotto ma oggi non è più
    usata da nessuna card — servirà per un futuro membro senza foto.
-   Il ruolo di Andrea resta da confermare.
+   Ruolo di Andrea: Responsabile Marketing (confermato 2026-09-20).
    Prompt per generare le foto team mancanti: prompt-foto-team-sfondo-brand.md */
 .team { background: var(--panna); }
 .team-carousel {
