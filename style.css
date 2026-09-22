@@ -1048,10 +1048,22 @@ section[id] { scroll-margin-top: var(--header-h); }
    Sopra il cookie banner (z-index 500) così resta cliccabile quando il
    banner è visibile; script.js sposta --bottom via style inline per non
    sovrapporsi al testo del banner (vedi syncWhatsappFabPosition). Nascosto
-   mentre il menu circolare mobile è aperto (sibling successivo nel DOM). */
+   mentre il menu circolare mobile è aperto (sibling successivo nel DOM).
+   Hover: porting del "riempimento cerchio" di catalogo-animazioni-21st/
+   arrow-fill-button (Hyperiux Vault) — lì un disco che parte dalle
+   dimensioni del cerchio-icona su un pill con testo si espande a coprire
+   l'intero bottone (clip-path/inset animati) mentre il colore si inverte;
+   qui, essendo il fab già un cerchio icona-soltanto senza pill attorno,
+   lo stesso disco parte a raggio 0 dal bordo sinistro (lato da cui arriva
+   lo sguardo, essendo il fab ora in basso a destra) e si espande a coprire
+   l'intero bottone via clip-path, sfondo verde→bianco, icona bianco→verde
+   in sync (stessa durata/easing del sorgente). overflow:hidden + il
+   border-radius:50% del bottone bastano a ritagliare il disco alla forma
+   circolare, senza bisogno del calcolo inset del sorgente (pensato per un
+   pill rettangolare). */
 .whatsapp-fab {
   position: fixed;
-  left: 24px;
+  right: 24px;
   bottom: 24px;
   z-index: 510;
   width: 58px;
@@ -1060,21 +1072,33 @@ section[id] { scroll-margin-top: var(--header-h); }
   align-items: center;
   justify-content: center;
   border-radius: 50%;
+  overflow: hidden;
   background: #25d366;
   color: #fff;
   box-shadow: var(--ombra-lieve);
-  transition: background var(--transizione), box-shadow var(--transizione), transform var(--transizione), opacity var(--transizione);
+  transition: color 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86), box-shadow var(--transizione), transform var(--transizione), opacity var(--transizione);
 }
-.whatsapp-fab svg { width: 30px; height: 30px; }
+.whatsapp-fab-fill {
+  position: absolute;
+  inset: 0;
+  background: #ffffff;
+  clip-path: circle(0% at 0% 50%);
+  transition: clip-path 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+  pointer-events: none;
+}
+.whatsapp-fab-icon { position: relative; z-index: 1; width: 30px; height: 30px; }
 .whatsapp-fab:hover, .whatsapp-fab:focus-visible {
-  background: #1ebe5d;
+  color: #25d366;
   box-shadow: var(--ombra);
   transform: scale(1.06);
 }
+.whatsapp-fab:hover .whatsapp-fab-fill, .whatsapp-fab:focus-visible .whatsapp-fab-fill {
+  clip-path: circle(150% at 0% 50%);
+}
 .circular-nav.open ~ .whatsapp-fab { opacity: 0; pointer-events: none; }
 @media (max-width: 540px) {
-  .whatsapp-fab { left: 16px; bottom: 16px; width: 52px; height: 52px; }
-  .whatsapp-fab svg { width: 27px; height: 27px; }
+  .whatsapp-fab { right: 16px; bottom: 16px; width: 52px; height: 52px; }
+  .whatsapp-fab-icon { width: 27px; height: 27px; }
 }
 
 /* ---------- Campi form "Chiedi info" (riusati da contatto.html) ---------- */
