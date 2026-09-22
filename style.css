@@ -1040,7 +1040,41 @@ section[id] { scroll-margin-top: var(--header-h); }
 .btn-sm { padding: 0.6rem 1.3rem; font-size: 0.86rem; }
 @media (max-width: 620px) {
   .cookie-banner-inner { flex-direction: column; align-items: stretch; }
+  .cookie-banner-inner p { flex-basis: auto; }
   .cookie-banner-actions { justify-content: flex-end; }
+}
+
+/* ---------- WhatsApp fab ----------
+   Sopra il cookie banner (z-index 500) così resta cliccabile quando il
+   banner è visibile; script.js sposta --bottom via style inline per non
+   sovrapporsi al testo del banner (vedi syncWhatsappFabPosition). Nascosto
+   mentre il menu circolare mobile è aperto (sibling successivo nel DOM). */
+.whatsapp-fab {
+  position: fixed;
+  left: 24px;
+  bottom: 24px;
+  z-index: 510;
+  width: 58px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #25d366;
+  color: #fff;
+  box-shadow: var(--ombra-lieve);
+  transition: background var(--transizione), box-shadow var(--transizione), transform var(--transizione), opacity var(--transizione);
+}
+.whatsapp-fab svg { width: 30px; height: 30px; }
+.whatsapp-fab:hover, .whatsapp-fab:focus-visible {
+  background: #1ebe5d;
+  box-shadow: var(--ombra);
+  transform: scale(1.06);
+}
+.circular-nav.open ~ .whatsapp-fab { opacity: 0; pointer-events: none; }
+@media (max-width: 540px) {
+  .whatsapp-fab { left: 16px; bottom: 16px; width: 52px; height: 52px; }
+  .whatsapp-fab svg { width: 27px; height: 27px; }
 }
 
 /* ---------- Campi form "Chiedi info" (riusati da contatto.html) ---------- */

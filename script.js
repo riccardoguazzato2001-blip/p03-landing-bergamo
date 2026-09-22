@@ -695,11 +695,26 @@
   var gaConsent = null;
   try { gaConsent = localStorage.getItem(GA_CONSENT_KEY); } catch (e) { /* storage bloccato dal browser: trattalo come non deciso, banner resta comunque nascosto per non rompere la pagina */ }
 
+  // Fab WhatsApp: quando il cookie banner è visibile lo alza della sua
+  // altezza reale (cambia con il wrap del testo su mobile), altrimenti
+  // torna al bottom di default definito in CSS.
+  var whatsappFab = document.getElementById("whatsappFab");
+  function syncWhatsappFabPosition() {
+    if (!whatsappFab || !cookieBanner) return;
+    if (!cookieBanner.hidden) {
+      whatsappFab.style.bottom = (cookieBanner.offsetHeight + 16) + "px";
+    } else {
+      whatsappFab.style.bottom = "";
+    }
+  }
+
   if (gaConsent === "granted") {
     loadGA();
   } else if (gaConsent !== "denied" && cookieBanner) {
     cookieBanner.hidden = false;
   }
+  syncWhatsappFabPosition();
+  window.addEventListener("resize", syncWhatsappFabPosition);
 
   if (cookieBanner) {
     var gaAcceptBtn = document.getElementById("cookieAccept");
@@ -709,12 +724,14 @@
         try { localStorage.setItem(GA_CONSENT_KEY, "granted"); } catch (e) {}
         loadGA();
         cookieBanner.hidden = true;
+        syncWhatsappFabPosition();
       });
     }
     if (gaDeclineBtn) {
       gaDeclineBtn.addEventListener("click", function () {
         try { localStorage.setItem(GA_CONSENT_KEY, "denied"); } catch (e) {}
         cookieBanner.hidden = true;
+        syncWhatsappFabPosition();
       });
     }
   }
