@@ -670,6 +670,30 @@ section[id] { scroll-margin-top: var(--header-h); }
   .offerta-card:nth-child(-n+2)::after { opacity: 0.5; display: block; }
 }
 .offerta-card > * { position: relative; z-index: 2; }
+/* Sfondo tematico per card: immagine fal-ai astratta, sfumata verso trasparente
+   nell'angolo alto-destra via mask-image — sempre lo stesso angolo su tutte e 6,
+   statica (non reagisce all'hover, resta separata dallo spotlight ::before). */
+.offerta-card > .offerta-card-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-repeat: no-repeat;
+  background-position: top right;
+  background-size: 210px 210px;
+  -webkit-mask-image: radial-gradient(circle 190px at 100% 0%, #000 0%, #000 45%, rgba(0,0,0,0.65) 72%, transparent 96%);
+  mask-image: radial-gradient(circle 190px at 100% 0%, #000 0%, #000 45%, rgba(0,0,0,0.65) 72%, transparent 96%);
+  pointer-events: none;
+}
+/* Zona di sicurezza testo: il titolo e il paragrafo non entrano mai sotto
+   l'immagine di sfondo, indipendentemente da quanto testo/quante righe —
+   niente più overlap testo-immagine su desktop (bug trovato 2026-09-27). */
+.offerta-card h3, .offerta-card p { max-width: calc(100% - 108px); }
+.offerta-card--prenotazioni .offerta-card-bg { background-image: url("img/offerta/offerta-prenotazioni.png"); }
+.offerta-card--whatsapp .offerta-card-bg { background-image: url("img/offerta/offerta-whatsapp.png"); }
+.offerta-card--caparra .offerta-card-bg { background-image: url("img/offerta/offerta-caparra.png"); }
+.offerta-card--instagram .offerta-card-bg { background-image: url("img/offerta/offerta-instagram.png"); }
+.offerta-card--su-misura .offerta-card-bg { background-image: url("img/offerta/offerta-su-misura.png"); }
+.offerta-card--insieme .offerta-card-bg { background-image: url("img/offerta/offerta-insieme.png"); }
 .icon-wrap {
   width: 46px; height: 46px;
   border-radius: var(--radius-sm);
@@ -1143,6 +1167,15 @@ section[id] { scroll-margin-top: var(--header-h); }
   .extra-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 720px) {
+  /* Card "L'offerta" a piena larghezza: un fade tarato per la card desktop
+     (~380px) invaderebbe il testo, soprattutto sui paragrafi a 2 righe
+     (es. Instagram) — sfondo e maschera più piccoli sotto i 720px. */
+  .offerta-card h3, .offerta-card p { max-width: none; }
+  .offerta-card > .offerta-card-bg {
+    background-size: 150px 150px;
+    -webkit-mask-image: radial-gradient(circle 140px at 100% 0%, #000 0%, #000 45%, rgba(0,0,0,0.65) 72%, transparent 96%);
+    mask-image: radial-gradient(circle 140px at 100% 0%, #000 0%, #000 45%, rgba(0,0,0,0.65) 72%, transparent 96%);
+  }
   .dock-nav { display: none; }
   .nav-toggle { display: flex; }
   .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
