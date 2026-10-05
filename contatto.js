@@ -13,12 +13,20 @@
   var params = new URLSearchParams(window.location.search);
   var pacchetto = params.get("pacchetto") || "";
 
+  var form = document.getElementById("contattoForm");
+
+  // Testi UI letti dai data-msg-* del form (tradotti dal build multilingua,
+  // vedi i18n/LEGGIMI.md). Il secondo argomento è il fallback italiano.
+  function msg(nome, fallback) {
+    return (form && form.getAttribute("data-msg-" + nome)) || fallback;
+  }
+  var lingua = (document.documentElement.getAttribute("lang") || "it").slice(0, 2);
+
   var badgeEl = document.getElementById("contattoBadge");
   var pacchettoInput = document.getElementById("contattoPacchetto");
   if (pacchettoInput) pacchettoInput.value = pacchetto;
-  if (badgeEl) badgeEl.textContent = pacchetto ? "Hai scelto: " + pacchetto : "Richiesta informazioni";
+  if (badgeEl) badgeEl.textContent = pacchetto ? msg("badge-scelto", "Hai scelto:") + " " + pacchetto : msg("badge-default", "Richiesta informazioni");
 
-  var form = document.getElementById("contattoForm");
   if (!form) return;
 
   var statusEl = document.getElementById("contattoStatus");
@@ -51,17 +59,18 @@
       email: form.email.value.trim(),
       messaggio: form.messaggio.value.trim(),
       pagina: window.location.href,
+      lingua: lingua,
       timestamp: new Date().toISOString()
     };
 
     if (!INFO_FORM_BACKEND_URL) {
       mailtoFallback(data);
-      showStatus("Si apre il tuo programma di posta con i dati già compilati.", true);
+      showStatus(msg("mailto", "Si apre il tuo programma di posta con i dati già compilati."), true);
       return;
     }
 
     submitBtn.disabled = true;
-    if (submitLabel) submitLabel.textContent = "Invio in corso…";
+    if (submitLabel) submitLabel.textContent = msg("invio", "Invio in corso…");
 
     // Content-Type text/plain con dentro una stringa JSON: è una "richiesta
     // semplice" CORS, niente preflight OPTIONS (Apps Script non lo gestisce).
@@ -74,19 +83,19 @@
       .then(function (res) { return res.json(); })
       .then(function (json) {
         submitBtn.disabled = false;
-        if (submitLabel) submitLabel.textContent = "Invia la richiesta";
+        if (submitLabel) submitLabel.textContent = msg("invia", "Invia la richiesta");
         if (json && json.ok) {
           form.reset();
           if (pacchettoInput) pacchettoInput.value = pacchetto;
-          showStatus("Richiesta inviata! Ti ricontattiamo entro 24-48h.", true);
+          showStatus(msg("ok", "Richiesta inviata! Ti ricontattiamo entro 24-48h."), true);
         } else {
-          showStatus("Qualcosa non ha funzionato. Riprova o scrivici a info@quadralabs.eu.", false);
+          showStatus(msg("errore", "Qualcosa non ha funzionato. Riprova o scrivici a info@quadralabs.eu."), false);
         }
       })
       .catch(function () {
         submitBtn.disabled = false;
-        if (submitLabel) submitLabel.textContent = "Invia la richiesta";
-        showStatus("Qualcosa non ha funzionato. Riprova o scrivici a info@quadralabs.eu.", false);
+        if (submitLabel) submitLabel.textContent = msg("invia", "Invia la richiesta");
+        showStatus(msg("errore", "Qualcosa non ha funzionato. Riprova o scrivici a info@quadralabs.eu."), false);
       });
   });
 })();

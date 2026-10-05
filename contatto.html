@@ -7,6 +7,13 @@
 <title>Richiedi informazioni — QUADRALABS</title>
 <meta name="description" content="Raccontaci la tua attività: ti ricontattiamo per parlare del tuo sito, senza impegno.">
 <link rel="canonical" href="https://siti.quadralabs.eu/contatto.html">
+<!-- Multilingua: en/ de/ fr/ es/ sono GENERATE da i18n/build.py. Si modifica SOLO l'italiano. -->
+<link rel="alternate" hreflang="it" href="https://siti.quadralabs.eu/contatto.html">
+<link rel="alternate" hreflang="en" href="https://siti.quadralabs.eu/en/contatto.html">
+<link rel="alternate" hreflang="de" href="https://siti.quadralabs.eu/de/contatto.html">
+<link rel="alternate" hreflang="fr" href="https://siti.quadralabs.eu/fr/contatto.html">
+<link rel="alternate" hreflang="es" href="https://siti.quadralabs.eu/es/contatto.html">
+<link rel="alternate" hreflang="x-default" href="https://siti.quadralabs.eu/contatto.html">
 <link rel="icon" type="image/svg+xml" href="img/quadra-logo-icona.svg">
 <meta name="theme-color" content="#171a3d">
 <link rel="stylesheet" href="fonts/fonts.css">
@@ -44,6 +51,18 @@
     <nav class="nav">
       <a href="index.html">&larr; Torna al sito</a>
     </nav>
+    <div class="lang-switch" id="langSwitch">
+      <button type="button" class="lang-switch-btn" id="langSwitchBtn" aria-haspopup="true" aria-expanded="false" aria-controls="langSwitchMenu" aria-label="Cambia lingua">
+        <span class="lang-switch-code" translate="no">IT</span><svg class="lang-switch-chevron" viewBox="0 0 12 12" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M2.5 4.5 6 8l3.5-3.5"/></svg>
+      </button>
+      <ul class="lang-switch-menu" id="langSwitchMenu" translate="no" hidden>
+        <li><a href="contatto.html" hreflang="it" lang="it" data-lang="it" aria-current="true">Italiano <span>IT</span></a></li>
+        <li><a href="en/contatto.html" hreflang="en" lang="en" data-lang="en">English <span>EN</span></a></li>
+        <li><a href="de/contatto.html" hreflang="de" lang="de" data-lang="de">Deutsch <span>DE</span></a></li>
+        <li><a href="fr/contatto.html" hreflang="fr" lang="fr" data-lang="fr">Français <span>FR</span></a></li>
+        <li><a href="es/contatto.html" hreflang="es" lang="es" data-lang="es">Español <span>ES</span></a></li>
+      </ul>
+    </div>
   </div>
 </header>
 
@@ -67,7 +86,16 @@
     </div>
 
     <div class="contatto-form-wrap">
-      <form id="contattoForm" novalidate>
+      <!-- Testi che contatto.js mostra a runtime: stanno qui come data-msg-*
+           (non nel JS) così il build multilingua li traduce con la pagina. -->
+      <form id="contattoForm" novalidate
+        data-msg-badge-default="Richiesta informazioni"
+        data-msg-badge-scelto="Hai scelto:"
+        data-msg-invio="Invio in corso…"
+        data-msg-invia="Invia la richiesta"
+        data-msg-ok="Richiesta inviata! Ti ricontattiamo entro 24-48h."
+        data-msg-errore="Qualcosa non ha funzionato. Riprova o scrivici a info@quadralabs.eu."
+        data-msg-mailto="Si apre il tuo programma di posta con i dati già compilati.">
         <input type="hidden" name="pacchetto" id="contattoPacchetto">
 
         <div class="info-field-row">
@@ -133,9 +161,11 @@
     <p><strong>QUADRALABS</strong> — Bergamo</p>
     <p class="footer-sub">Progetto indipendente, non affiliato ad alcuna web agency</p>
     <p class="footer-sub"><a href="privacy.html">Privacy &amp; Cookie</a></p>
+    <p class="footer-sub footer-lingue" translate="no"><a href="contatto.html" hreflang="it" lang="it" data-lang="it" aria-current="true">Italiano</a> <a href="en/contatto.html" hreflang="en" lang="en" data-lang="en">English</a> <a href="de/contatto.html" hreflang="de" lang="de" data-lang="de">Deutsch</a> <a href="fr/contatto.html" hreflang="fr" lang="fr" data-lang="fr">Français</a> <a href="es/contatto.html" hreflang="es" lang="es" data-lang="es">Español</a></p>
   </div>
 </footer>
 
 <script src="contatto.js"></script>
+<script src="lingua.js"></script>
 </body>
 </html>

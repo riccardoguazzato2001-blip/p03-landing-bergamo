@@ -13,6 +13,14 @@
 <meta property="og:description" content="Siti con prenotazioni online per le attività di Bergamo e provincia. Guarda il sito vero che abbiamo già online.">
 <meta property="og:image" content="img/hero-bergamo.jpg">
 <link rel="canonical" href="https://siti.quadralabs.eu/">
+<!-- Multilingua: en/ de/ fr/ es/ sono GENERATE da i18n/build.py (GitHub Action
+     a ogni push). Si modifica SOLO questo file italiano. Vedi i18n/LEGGIMI.md. -->
+<link rel="alternate" hreflang="it" href="https://siti.quadralabs.eu/">
+<link rel="alternate" hreflang="en" href="https://siti.quadralabs.eu/en/">
+<link rel="alternate" hreflang="de" href="https://siti.quadralabs.eu/de/">
+<link rel="alternate" hreflang="fr" href="https://siti.quadralabs.eu/fr/">
+<link rel="alternate" hreflang="es" href="https://siti.quadralabs.eu/es/">
+<link rel="alternate" hreflang="x-default" href="https://siti.quadralabs.eu/">
 <meta name="theme-color" content="#171a3d">
 <script type="application/ld+json">
 {
@@ -67,6 +75,18 @@
         <path fill="currentColor" d="M 1233.8 1195.25 L 1279.08 1195.3 L 1279.46 1306.41 C 1300.06 1307.13 1323.11 1306.12 1344.25 1306.46 C 1344.56 1320.62 1344.78 1334.79 1344.91 1348.96 L 1233.33 1348.93 L 1233.8 1195.25 z"/>
       </svg>
     </a>
+    <div class="lang-switch" id="langSwitch">
+      <button type="button" class="lang-switch-btn" id="langSwitchBtn" aria-haspopup="true" aria-expanded="false" aria-controls="langSwitchMenu" aria-label="Cambia lingua">
+        <span class="lang-switch-code" translate="no">IT</span><svg class="lang-switch-chevron" viewBox="0 0 12 12" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M2.5 4.5 6 8l3.5-3.5"/></svg>
+      </button>
+      <ul class="lang-switch-menu" id="langSwitchMenu" translate="no" hidden>
+        <li><a href="./" hreflang="it" lang="it" data-lang="it" aria-current="true">Italiano <span>IT</span></a></li>
+        <li><a href="en/" hreflang="en" lang="en" data-lang="en">English <span>EN</span></a></li>
+        <li><a href="de/" hreflang="de" lang="de" data-lang="de">Deutsch <span>DE</span></a></li>
+        <li><a href="fr/" hreflang="fr" lang="fr" data-lang="fr">Français <span>FR</span></a></li>
+        <li><a href="es/" hreflang="es" lang="es" data-lang="es">Español <span>ES</span></a></li>
+      </ul>
+    </div>
     <button class="nav-toggle" id="navToggle" aria-label="Apri menu" aria-expanded="false" aria-controls="circularNav">
       <span></span><span></span><span></span>
     </button>
@@ -147,7 +167,7 @@
       <img class="hero-mockup hero-mockup-3" src="img/hero-mockups/mockup-2-saas.png" alt="" loading="lazy">
     </div>
     <div class="container hero-content">
-      <h1 class="reveal">Il sito per la tua attività,<br><span class="text-ambra hero-rotate" id="heroRotate"><span class="sr-only" id="heroRotateSR">senza pensieri</span><span class="hero-rotate-chars" id="heroRotateChars" aria-hidden="true"></span></span></h1>
+      <h1 class="reveal">Il sito per la tua attività,<br><span class="text-ambra hero-rotate" id="heroRotate" data-phrases="senza pensieri|pronto in pochi giorni|che trova clienti|senza tecnicismi"><span class="sr-only" id="heroRotateSR">senza pensieri</span><span class="hero-rotate-chars" id="heroRotateChars" aria-hidden="true"></span></span></h1>
       <p class="hero-sub reveal">
         Siamo <strong>QUADRALABS</strong>, un piccolo team di Bergamo.
         Costruiamo siti con prenotazioni online per negozi, saloni, ristoranti
@@ -575,12 +595,20 @@
     <div class="container cta-finale-inner">
       <p class="kicker kicker-light reveal">Prima di tutto, due chiacchiere</p>
       <h2 class="reveal">Dicci cosa ti servirebbe davvero</h2>
-      <p class="cta-finale-lead reveal">
+      <p class="cta-finale-lead reveal" data-i18n-solo="it">
         5 minuti di domande semplici, nessuna registrazione. Ci serve a capire cosa ti
         serve davvero, prima di proporti qualcosa.
       </p>
-      <a href="https://sondaggio-bergamo.netlify.app/" target="_blank" rel="noopener" class="btn btn-primary btn-lg btn-ember reveal" id="surveyCtaBtn">
-        <span class="btn-ember-label">Rispondi al sondaggio →</span>
+      <!-- Il sondaggio è solo in italiano (attività di Bergamo): nelle lingue
+           straniere il build mostra il testo "estero" e porta il bottone al
+           modulo di contatto (data-i18n-estero-href). -->
+      <p class="cta-finale-lead reveal" data-i18n-solo="estero" hidden>
+        Raccontaci la tua attività e cosa ti servirebbe: ti risponde direttamente
+        il team, senza impegno.
+      </p>
+      <a href="https://sondaggio-bergamo.netlify.app/" target="_blank" rel="noopener" class="btn btn-primary btn-lg btn-ember reveal" id="surveyCtaBtn" data-i18n-estero-href="contatto.html">
+        <span class="btn-ember-label" data-i18n-solo="it">Rispondi al sondaggio →</span>
+        <span class="btn-ember-label" data-i18n-solo="estero" hidden>Scrivici →</span>
       </a>
     </div>
   </section>
@@ -589,6 +617,7 @@
     <p><strong>QUADRALABS</strong> — Bergamo</p>
     <p class="footer-sub">Progetto indipendente, non affiliato ad alcuna web agency</p>
     <p class="footer-sub"><a href="privacy.html">Privacy &amp; Cookie</a></p>
+    <p class="footer-sub footer-lingue" translate="no"><a href="./" hreflang="it" lang="it" data-lang="it" aria-current="true">Italiano</a> <a href="en/" hreflang="en" lang="en" data-lang="en">English</a> <a href="de/" hreflang="de" lang="de" data-lang="de">Deutsch</a> <a href="fr/" hreflang="fr" lang="fr" data-lang="fr">Français</a> <a href="es/" hreflang="es" lang="es" data-lang="es">Español</a></p>
   </div>
 </footer>
 
@@ -602,7 +631,7 @@
   </div>
 </div>
 
-<a class="whatsapp-fab" id="whatsappFab" href="https://wa.me/393534078372?text=Ciao%2C%20vorrei%20avere%20qualche%20informazione." target="_blank" rel="noopener" aria-label="Scrivici su WhatsApp">
+<a class="whatsapp-fab" id="whatsappFab" href="https://wa.me/393534078372?text=Ciao%2C%20vorrei%20avere%20qualche%20informazione." data-wa-testo="Ciao, vorrei avere qualche informazione." target="_blank" rel="noopener" aria-label="Scrivici su WhatsApp">
   <span class="whatsapp-fab-fill" aria-hidden="true"></span>
   <svg class="whatsapp-fab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
     <path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
@@ -611,5 +640,6 @@
 </a>
 
 <script src="script.js"></script>
+<script src="lingua.js"></script>
 </body>
 </html>

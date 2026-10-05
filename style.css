@@ -1248,3 +1248,86 @@ section[id] { scroll-margin-top: var(--header-h); }
 @media (max-width: 480px) {
   .contatto-photos { grid-template-columns: 1fr; }
 }
+
+/* ---------- Multilingua: selettore lingua + barra di suggerimento ----------
+   Markup in index/contatto/privacy, logica in lingua.js. Le versioni
+   en/ de/ fr/ es/ sono GENERATE da i18n/build.py: si modifica solo l'italiano.
+   [data-i18n-solo="estero"] = elemento che esiste solo nelle lingue straniere
+   (il build toglie l'attributo, quindi lì si vede); in italiano resta nascosto.
+   Regola con !important perché `hidden` da solo perde contro un display di classe. */
+[data-i18n-solo="estero"] { display: none !important; }
+
+.lang-switch { position: relative; margin-left: auto; z-index: 102; }
+/* contatto/privacy: header = brand · "← Torna al sito" · selettore */
+.header-inner > .nav { margin-left: auto; }
+.nav + .lang-switch { margin-left: 1.2rem; }
+.lang-switch-btn {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  min-height: 40px; padding: 0.35rem 0.8rem;
+  border: 1px solid rgba(244, 241, 234, 0.35); border-radius: 999px;
+  background: transparent; color: var(--testo-chiaro);
+  font: 600 0.82rem/1 var(--font-display); letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background var(--transizione), color var(--transizione), border-color var(--transizione);
+}
+.site-header.scrolled .lang-switch-btn { color: var(--indaco-900); border-color: rgba(23, 26, 61, 0.2); }
+.lang-switch-btn:hover, .lang-switch-btn:focus-visible,
+.lang-switch-btn[aria-expanded="true"] { background: var(--ambra); border-color: var(--ambra); color: var(--indaco-950); }
+.lang-switch-chevron { width: 12px; height: 12px; transition: transform var(--transizione); }
+.lang-switch-btn[aria-expanded="true"] .lang-switch-chevron { transform: rotate(180deg); }
+.lang-switch-menu {
+  position: absolute; top: calc(100% + 8px); right: 0;
+  min-width: 170px; margin: 0; padding: 0.4rem; list-style: none;
+  background: var(--indaco-900); border-radius: var(--radius-sm);
+  box-shadow: var(--ombra);
+}
+.lang-switch-menu[hidden] { display: none; }
+.lang-switch-menu a {
+  display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  padding: 0.55rem 0.75rem; border-radius: 8px;
+  color: var(--testo-chiaro); font-size: 0.9rem;
+  transition: background var(--transizione), color var(--transizione);
+}
+.lang-switch-menu a span { font: 600 0.72rem/1 var(--font-display); opacity: 0.55; letter-spacing: 0.06em; }
+.lang-switch-menu a:hover, .lang-switch-menu a:focus-visible { background: var(--indaco-800); color: var(--ambra-chiara); }
+.lang-switch-menu a[aria-current="true"] { color: var(--ambra); }
+@media (max-width: 720px) {
+  .lang-switch-btn { min-height: 36px; padding: 0.3rem 0.65rem; }
+}
+
+.footer-lingue { margin-top: 0.6rem !important; }
+.footer-lingue a { margin-right: 0.7rem; }
+.footer-lingue a[aria-current="true"] { text-decoration: none; opacity: 1; font-weight: 600; }
+
+.lang-suggest {
+  position: fixed; top: calc(var(--header-h) + 10px); left: 50%; transform: translateX(-50%);
+  z-index: 99; display: flex; align-items: center; gap: 0.8rem;
+  max-width: calc(100% - 32px); padding: 0.55rem 0.6rem 0.55rem 1.1rem;
+  background: var(--indaco-900); color: var(--testo-chiaro);
+  border-radius: 999px; box-shadow: var(--ombra);
+  font-size: 0.88rem;
+}
+.lang-suggest[hidden] { display: none; }
+/* desktop: in alto a destra sotto il selettore, stretta e su più righe, così
+   non copre né il dock centrale (z-index 110) né il titolo della hero */
+@media (min-width: 721px) {
+  .lang-suggest {
+    top: calc(var(--header-h) + 8px); right: 24px; left: auto; transform: none;
+    max-width: 340px; flex-wrap: wrap; row-gap: 0.5rem;
+    border-radius: var(--radius-sm); padding: 0.8rem 0.6rem 0.8rem 1rem;
+  }
+  .lang-suggest span { flex: 1 1 220px; }
+}
+.lang-suggest a {
+  flex-shrink: 0; padding: 0.35rem 0.9rem; border-radius: 999px;
+  background: var(--ambra); color: var(--indaco-950); font-weight: 600;
+}
+.lang-suggest a:hover { background: var(--ambra-chiara); }
+.lang-suggest button {
+  flex-shrink: 0; width: 30px; height: 30px; border: none; border-radius: 50%;
+  background: transparent; color: inherit; font-size: 1.2rem; line-height: 1; cursor: pointer; opacity: 0.7;
+}
+.lang-suggest button:hover { opacity: 1; background: var(--indaco-800); }
+@media (max-width: 520px) {
+  .lang-suggest { border-radius: var(--radius-sm); font-size: 0.82rem; }
+}

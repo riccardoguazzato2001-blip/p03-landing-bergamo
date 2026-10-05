@@ -42,6 +42,18 @@
     <nav class="nav">
       <a href="index.html">&larr; Torna al sito</a>
     </nav>
+    <div class="lang-switch" id="langSwitch">
+      <button type="button" class="lang-switch-btn" id="langSwitchBtn" aria-haspopup="true" aria-expanded="false" aria-controls="langSwitchMenu" aria-label="Cambia lingua">
+        <span class="lang-switch-code" translate="no">IT</span><svg class="lang-switch-chevron" viewBox="0 0 12 12" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M2.5 4.5 6 8l3.5-3.5"/></svg>
+      </button>
+      <ul class="lang-switch-menu" id="langSwitchMenu" translate="no" hidden>
+        <li><a href="privacy.html" hreflang="it" lang="it" data-lang="it" aria-current="true">Italiano <span>IT</span></a></li>
+        <li><a href="en/privacy.html" hreflang="en" lang="en" data-lang="en">English <span>EN</span></a></li>
+        <li><a href="de/privacy.html" hreflang="de" lang="de" data-lang="de">Deutsch <span>DE</span></a></li>
+        <li><a href="fr/privacy.html" hreflang="fr" lang="fr" data-lang="fr">Français <span>FR</span></a></li>
+        <li><a href="es/privacy.html" hreflang="es" lang="es" data-lang="es">Español <span>ES</span></a></li>
+      </ul>
+    </div>
   </div>
 </header>
 
@@ -49,6 +61,12 @@
   <p class="kicker">Informativa</p>
   <h1 style="margin-bottom: 1.4rem;">Privacy &amp; Cookie</h1>
   <p style="font-size: 0.9rem; color: var(--testo-tenue); margin-bottom: 2rem;">Ultimo aggiornamento: 12 agosto 2026</p>
+  <!-- Solo nelle lingue straniere (decisione Kevin 2026-10-05): la traduzione
+       è di cortesia, vale l'italiano. Il link data-lang="it" il build lo punta
+       alla privacy italiana. -->
+  <p data-i18n-solo="estero" hidden style="padding: 0.8rem 1.1rem; border-left: 3px solid var(--ambra); background: var(--panna-alt); font-size: 0.9rem; margin-bottom: 2rem;">
+  <strong>Traduzione di cortesia.</strong> In caso di discrepanza fa fede la
+  <a href="privacy.html" data-lang="it" hreflang="it">versione italiana</a> di questa informativa.</p>
 
   <h3 style="margin: 1.6rem 0 0.5rem; font-family: var(--font-display);">Chi siamo</h3>
   <p>Questo sito è realizzato da <strong>QUADRALABS</strong>, un team di studenti di Ingegneria Gestionale
@@ -93,7 +111,7 @@
   <p>Puoi chiedere in ogni momento accesso, rettifica o cancellazione dei dati che ci hai lasciato
   scrivendo a <a href="mailto:info@quadralabs.eu">info@quadralabs.eu</a> (artt. 15-22 Reg. UE 2016/679 — GDPR).</p>
 
-  <p style="margin-top: 2rem; padding: 1rem 1.2rem; border-radius: var(--radius-sm); background: var(--panna-alt); font-size: 0.85rem; color: var(--testo-tenue);">
+  <p data-i18n-solo="it" style="margin-top: 2rem; padding: 1rem 1.2rem; border-radius: var(--radius-sm); background: var(--panna-alt); font-size: 0.85rem; color: var(--testo-tenue);">
   &#9888;&#65039; <strong>Nota interna (da togliere solo dopo revisione):</strong> questo testo è una bozza scritta con
   supporto AI per colmare un vuoto di trasparenza minima durante la fase di validazione — non è una certificazione
   legale. Prima di scalare la distribuzione (stampa biglietti, più traffico) vale la pena un check veloce con lo
@@ -105,6 +123,7 @@
   <div class="container footer-inner">
     <p><strong>QUADRALABS</strong> — Bergamo</p>
     <p class="footer-sub">Progetto indipendente, non affiliato ad alcuna web agency</p>
+    <p class="footer-sub footer-lingue" translate="no"><a href="privacy.html" hreflang="it" lang="it" data-lang="it" aria-current="true">Italiano</a> <a href="en/privacy.html" hreflang="en" lang="en" data-lang="en">English</a> <a href="de/privacy.html" hreflang="de" lang="de" data-lang="de">Deutsch</a> <a href="fr/privacy.html" hreflang="fr" lang="fr" data-lang="fr">Français</a> <a href="es/privacy.html" hreflang="es" lang="es" data-lang="es">Español</a></p>
   </div>
 </footer>
 
@@ -115,5 +134,6 @@
     window.location.href = "index.html";
   });
 </script>
+<script src="lingua.js"></script>
 </body>
 </html>

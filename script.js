@@ -165,7 +165,11 @@
     var srEl = document.getElementById("heroRotateSR");
     if (!wrap || !charsEl || !srEl) return;
 
-    var PHRASES = ["senza pensieri", "pronto in pochi giorni", "che trova clienti", "senza tecnicismi"];
+    // Frasi in data-phrases (separate da |) e non qui: così il build
+    // multilingua (i18n/build.py) le traduce insieme al resto della pagina.
+    var PHRASES = (wrap.getAttribute("data-phrases") || srEl.textContent).split("|")
+      .map(function (s) { return s.trim(); })
+      .filter(Boolean);
     var ROTATION_INTERVAL = 2800; // ms
     var STAGGER = 0.03; // secondi per carattere, staggerFrom "last" come il sorgente
     var DURATION = 0.5; // secondi, deve combaciare con --hero-rotate-duration in CSS
@@ -257,6 +261,10 @@
       "img/portfolio/falegnameria-lavori.jpg",
       "img/portfolio/rifugio-stellaalpina-home.jpg"
     ];
+    // Nelle pagine tradotte (en/ de/ ...) il build mette data-base="../" su
+    // <html>: i percorsi scritti qui in JS non passano dal riscrittore HTML.
+    var base = document.documentElement.getAttribute("data-base") || "";
+    images = images.map(function (src) { return base + src; });
 
     // Stessi default di CorridorPath nel sorgente .tsx.
     var P = {

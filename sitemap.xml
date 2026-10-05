@@ -1,15 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<!-- GENERATO da i18n/build.py: non modificare a mano. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://siti.quadralabs.eu/</loc>
-    <lastmod>2026-09-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://siti.quadralabs.eu/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://siti.quadralabs.eu/en/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://siti.quadralabs.eu/de/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://siti.quadralabs.eu/fr/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://siti.quadralabs.eu/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://siti.quadralabs.eu/"/>
+  </url>
+  <url>
+    <loc>https://siti.quadralabs.eu/en/</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://siti.quadralabs.eu/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://siti.quadralabs.eu/en/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://siti.quadralabs.eu/de/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://siti.quadralabs.eu/fr/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://siti.quadralabs.eu/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://siti.quadralabs.eu/"/>
+  </url>
+  <url>
+    <loc>https://siti.quadralabs.eu/de/</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://siti.quadralabs.eu/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://siti.quadralabs.eu/en/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://siti.quadralabs.eu/de/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://siti.quadralabs.eu/fr/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://siti.quadralabs.eu/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://siti.quadralabs.eu/"/>
+  </url>
+  <url>
+    <loc>https://siti.quadralabs.eu/fr/</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://siti.quadralabs.eu/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://siti.quadralabs.eu/en/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://siti.quadralabs.eu/de/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://siti.quadralabs.eu/fr/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://siti.quadralabs.eu/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://siti.quadralabs.eu/"/>
+  </url>
+  <url>
+    <loc>https://siti.quadralabs.eu/es/</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://siti.quadralabs.eu/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://siti.quadralabs.eu/en/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://siti.quadralabs.eu/de/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://siti.quadralabs.eu/fr/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://siti.quadralabs.eu/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://siti.quadralabs.eu/"/>
   </url>
   <url>
     <loc>https://siti.quadralabs.eu/contatto.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://siti.quadralabs.eu/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://siti.quadralabs.eu/en/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://siti.quadralabs.eu/de/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://siti.quadralabs.eu/fr/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://siti.quadralabs.eu/es/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://siti.quadralabs.eu/contatto.html"/>
+  </url>
+  <url>
+    <loc>https://siti.quadralabs.eu/en/contatto.html</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://siti.quadralabs.eu/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://siti.quadralabs.eu/en/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://siti.quadralabs.eu/de/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://siti.quadralabs.eu/fr/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://siti.quadralabs.eu/es/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://siti.quadralabs.eu/contatto.html"/>
+  </url>
+  <url>
+    <loc>https://siti.quadralabs.eu/de/contatto.html</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://siti.quadralabs.eu/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://siti.quadralabs.eu/en/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://siti.quadralabs.eu/de/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://siti.quadralabs.eu/fr/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://siti.quadralabs.eu/es/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://siti.quadralabs.eu/contatto.html"/>
+  </url>
+  <url>
+    <loc>https://siti.quadralabs.eu/fr/contatto.html</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://siti.quadralabs.eu/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://siti.quadralabs.eu/en/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://siti.quadralabs.eu/de/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://siti.quadralabs.eu/fr/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://siti.quadralabs.eu/es/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://siti.quadralabs.eu/contatto.html"/>
+  </url>
+  <url>
+    <loc>https://siti.quadralabs.eu/es/contatto.html</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://siti.quadralabs.eu/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://siti.quadralabs.eu/en/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://siti.quadralabs.eu/de/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://siti.quadralabs.eu/fr/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://siti.quadralabs.eu/es/contatto.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://siti.quadralabs.eu/contatto.html"/>
   </url>
 </urlset>
