@@ -1318,6 +1318,10 @@ section[id] { scroll-margin-top: var(--header-h); }
   }
   .lang-suggest span { flex: 1 1 220px; }
 }
+/* tra 721 e 1199px il dock centrale arriva fin sotto il selettore: la barra scende sotto il dock (bottom ~110px) */
+@media (min-width: 721px) and (max-width: 1199px) {
+  .lang-suggest { top: 122px; }
+}
 .lang-suggest a {
   flex-shrink: 0; padding: 0.35rem 0.9rem; border-radius: 999px;
   background: var(--ambra); color: var(--indaco-950); font-weight: 600;
