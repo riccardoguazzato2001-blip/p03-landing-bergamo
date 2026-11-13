@@ -1059,3 +1059,26 @@
     requestAnimationFrame(frame);
   })();
 })();
+
+/* v2 (2026-11-12): i loop della vetrina si caricano e partono solo quando il telefono è in vista;
+   con "riduci movimento" resta il fotogramma fermo (poster). */
+(function initVetrinaVideo() {
+  // l'mp4 sta accanto al poster: il poster è già riscritto per /en/ /de/ ecc. dal build i18n
+  var video = document.querySelectorAll(".vetrina-schermo video[data-video]");
+  if (!video.length) return;
+  var ridotto = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (ridotto || !("IntersectionObserver" in window)) return;
+  var io = new IntersectionObserver(function (voci) {
+    voci.forEach(function (v) {
+      var el = v.target;
+      if (v.isIntersecting) {
+        if (!el.src) el.src = el.poster.replace(/\.webp$/, ".mp4");
+        var p = el.play();
+        if (p && p.catch) p.catch(function () {});
+      } else if (!el.paused) {
+        el.pause();
+      }
+    });
+  }, { threshold: 0.35 });
+  video.forEach(function (el) { io.observe(el); });
+})();

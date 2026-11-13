@@ -1335,3 +1335,182 @@ section[id] { scroll-margin-top: var(--header-h); }
 @media (max-width: 520px) {
   .lang-suggest { border-radius: var(--radius-sm); font-size: 0.82rem; }
 }
+
+/* ============================================================
+   v2 (2026-11-12): materiale vero al posto delle icone.
+   - menu: etichette di testo (dock desktop e lista mobile)
+   - card offerta: schermata della vetrina o foto, niente icona/clip-art
+   - sezione #vetrina: 5 telefoni con i loop delle riprese
+   ============================================================ */
+
+/* Menu desktop: testo, stessa pillola panna */
+.dock-nav--testo { gap: 0.2rem; padding: 0.4rem; }
+.dock-link {
+  padding: 0.6rem 1.05rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--indaco-900);
+  white-space: nowrap;
+  transition: background var(--transizione), color var(--transizione);
+}
+.dock-link:hover, .dock-link:focus-visible { background: rgba(232, 163, 61, 0.24); }
+.dock-link-cta { background: var(--ambra); color: var(--indaco-950); }
+.dock-link-cta:hover, .dock-link-cta:focus-visible { background: var(--ambra-scura); }
+
+/* Menu mobile: lista verticale grande, niente cerchio */
+.circular-nav--lista .circular-nav-panel {
+  width: min(86vw, 360px);
+  aspect-ratio: auto;
+  border-radius: var(--radius);
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.25rem;
+  padding: 1rem;
+  background: var(--indaco-950);
+  box-shadow: none;
+}
+.circular-nav--lista .circular-nav-close { display: none; } /* chiude la X dell'header (#navToggle) */
+.circular-nav--lista .circular-nav-item {
+  position: static;
+  width: auto; height: auto;
+  border-radius: var(--radius-sm);
+  transform: none;
+  display: block;
+  padding: 0.85rem 1rem;
+  text-align: left;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+.circular-nav--lista .circular-nav-item-cta { margin-top: 0.6rem; text-align: center; }
+
+/* Card offerta con media in testa */
+.offerta-card h3, .offerta-card p { max-width: none; }
+.offerta-card { display: flex; flex-direction: column; }
+.offerta-media {
+  position: relative;
+  margin: -2rem -1.8rem 1.4rem;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--indaco-900);
+}
+.offerta-media img { width: 100%; height: 100%; object-fit: cover; }
+/* schermata: un telefono che spunta dal basso del riquadro */
+.offerta-media--schermo img {
+  position: absolute;
+  left: 50%;
+  top: 1.6rem;
+  width: 60%;
+  height: auto;
+  object-fit: fill;
+  border-radius: 14px 14px 0 0;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.35);
+  transform: translateX(-50%);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.offerta-card:hover .offerta-media--schermo img { transform: translate(-50%, -10px); }
+.offerta-media:not(.offerta-media--schermo) img { transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+.offerta-card:hover .offerta-media:not(.offerta-media--schermo) img { transform: scale(1.03); }
+.altri-grid .offerta-card { padding-bottom: 2.2rem; }
+
+/* Vetrina */
+.vetrina { background: var(--indaco-950); color: var(--testo-chiaro); overflow: hidden; }
+.vetrina h2 { color: var(--testo-chiaro); max-width: 18ch; text-wrap: balance; }
+.vetrina .section-lead { color: rgba(244, 241, 234, 0.78); max-width: 60ch; }
+.vetrina-lista {
+  list-style: none;
+  margin: 2.6rem auto 0;
+  padding: 0 4%;
+  width: min(1180px, 100%);
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1.4rem;
+}
+.vetrina-sito { display: flex; flex-direction: column; gap: 0.15rem; color: inherit; }
+.vetrina-schermo {
+  display: block;
+  aspect-ratio: 9 / 16;
+  margin-bottom: 0.9rem;
+  border-radius: 22px;
+  border: 5px solid #05060f;
+  outline: 1px solid rgba(244, 241, 234, 0.16);
+  overflow: hidden;
+  background: #05060f;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.vetrina-schermo video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.vetrina-sito:hover .vetrina-schermo, .vetrina-sito:focus-visible .vetrina-schermo { transform: translateY(-8px); }
+.vetrina-nome { font-family: var(--font-display); font-weight: 600; font-size: 1.12rem; }
+.vetrina-tipo { font-size: 0.86rem; color: var(--ambra-chiara); }
+.vetrina-cosa { font-size: 0.9rem; color: rgba(244, 241, 234, 0.72); line-height: 1.45; margin-top: 0.3rem; }
+.vetrina-azioni { margin-top: 2.4rem; }
+@media (max-width: 980px) {
+  .vetrina-lista {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 4%;
+    padding-bottom: 0.6rem;
+    scrollbar-width: none;
+  }
+  .vetrina-lista::-webkit-scrollbar { display: none; }
+  .vetrina-lista > li { flex: 0 0 min(62vw, 240px); scroll-snap-align: start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .offerta-media img, .vetrina-schermo { transition: none; }
+  .offerta-card:hover .offerta-media--schermo img { transform: translateX(-50%); }
+}
+
+/* v2: extra a la carte. Foto solo sugli extra visivi; i tecnici restano una lista compatta. */
+.extra-visivi {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.1rem;
+  margin-bottom: 1.1rem;
+}
+.extra-visivo {
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--carta);
+  border: 1px solid var(--bordo);
+  display: flex;
+  flex-direction: column;
+}
+.extra-visivo img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.extra-visivo:hover img { transform: scale(1.03); }
+.extra-visivo-testo { padding: 1.2rem 1.3rem 1.4rem; position: relative; background: var(--carta); }
+.extra-visivo h3 { font-size: 1.08rem; margin-bottom: 0.4em; }
+.extra-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.extra-bundle-grid { margin-top: 1.1rem; }
+.extra-bundle--foto {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.8rem 1.7rem;
+  background: var(--indaco-950) center / cover no-repeat;
+}
+.extra-bundle--foto::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to top, rgba(15, 17, 40, 0.94) 0%, rgba(15, 17, 40, 0.72) 45%, rgba(15, 17, 40, 0.18) 100%);
+}
+.extra-bundle--foto h3 { font-size: 1.35rem; }
+.extra-bundle--foto p { color: rgba(244, 241, 234, 0.88); max-width: 40ch; }
+@media (min-width: 981px) { .extra-bundle--foto { min-height: 300px; } }
+@media (prefers-reduced-motion: reduce) { .extra-visivo img { transition: none; } }
+
+.extra-bundle--presenza { background-image: url("img/v2/9-bottega-800.webp"); }
+.extra-bundle--multilingua { background-image: url("img/v2/8-rifugio-800.webp"); }
